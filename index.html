@@ -7,49 +7,75 @@
 <meta name="description" content="Show us how you trade. We'll turn it into something your community can learn from.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#0B1420; --ink-2:#0E1724; --panel:#121D2B; --line:#1F2E40;
   --slate:#55647A; --mist:#7C8CA1; --paper:#E4EDF5;
-  --signal:#2FD6A8; --gold:#E5C05B; --blue:#4C9FFF; --loss:#E86A76;
+  --signal:#2FD6A8; --gold:#E5C05B; --blue:#4C9FFF; --loss:#E86A76; --warn:#E5C05B;
+  --on-accent:#0B1420;
   --serif:"Instrument Serif",Georgia,serif;
   --sans:"Inter",system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,monospace;
   --gutter:clamp(16px,4vw,56px);
 }
+/* app themes — same four as the AlphaKio theme picker */
+:root[data-theme="ocean"]{--ink:#0E1016;--ink-2:#12151C;--panel:#161A22;--line:#252B36;--slate:#5A6475;--mist:#8A93A6;--paper:#E8ECF4;--signal:#4C6FFF;--gold:#3DDC97;--on-accent:#FFFFFF}
+:root[data-theme="violet"]{--ink:#0F0C16;--ink-2:#14101D;--panel:#1A1525;--line:#2C2440;--slate:#635A7A;--mist:#9A90B2;--paper:#EEEAF6;--signal:#9B6BFF;--gold:#F4A6C8;--on-accent:#FFFFFF}
+:root[data-theme="ember"]{--ink:#110E0C;--ink-2:#16120F;--panel:#1D1814;--line:#342A22;--slate:#6E6258;--mist:#A8998C;--paper:#F4EDE6;--signal:#FF7A2F;--gold:#F5C04A;--loss:#E0457B;--on-accent:#140E0A}
+body,.panel,.cols > div,nav.solid,.stage-col{transition:background-color .5s}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit}
-::selection{background:var(--signal);color:var(--ink)}
+::selection{background:var(--signal);color:var(--on-accent)}
 
 /* film grain */
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 .mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid color-mix(in srgb,var(--paper) 55%,transparent);border-radius:99px;padding:7px 14px;font:500 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper)}
+.chip i{width:6px;height:6px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--signal)}
 h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;line-height:.95}
 h2{font-size:clamp(44px,7vw,104px)}
 h2 em,h1 em{font-style:italic;color:var(--signal)}
 .wrap{padding:0 var(--gutter);max-width:1440px;margin:0 auto}
 .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
-.tag.gold{color:var(--gold);border-color:#4a3f22}
+.tag.gold{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 35%,transparent)}
 .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 
 /* ---------- nav ---------- */
 nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px var(--gutter);mix-blend-mode:normal;transition:background .3s}
 nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .logo{font:500 20px/1 var(--sans);letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
-.logo b{color:var(--signal);font-weight:500}
-.logo svg{width:22px;height:22px}
-.btn{display:inline-flex;align-items:center;gap:10px;border-radius:99px;padding:14px 22px;font:500 15px/1 var(--sans);text-decoration:none;cursor:pointer;border:1px solid var(--signal);background:var(--signal);color:var(--ink);transition:transform .2s,box-shadow .2s}
+.logo{color:var(--paper)}
+.logo .wordmark{height:40px;width:auto;display:block;overflow:visible}
+.logo:hover .wordmark g{stroke:var(--signal)}
+.logo .wordmark g{transition:stroke .3s}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:99px;padding:14px 22px;font:500 15px/1 var(--sans);text-decoration:none;cursor:pointer;border:1px solid var(--signal);background:var(--signal);color:var(--on-accent);transition:transform .2s,box-shadow .2s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--signal)}
 .btn.ghost{background:transparent;color:var(--paper);border-color:var(--line)}
 .btn.ghost:hover{border-color:var(--mist);box-shadow:none}
 .btn.sm{padding:10px 16px;font-size:14px}
 .btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(4px)}
+
+/* theme picker (mirrors the app's) */
+.theme{position:relative}
+.theme-btn .dots{display:inline-flex;gap:3px}
+.theme-btn .dots i{width:8px;height:8px;border-radius:50%;background:var(--signal)}
+.theme-btn .dots i+i{background:var(--gold)}
+.theme-menu{position:absolute;right:0;top:calc(100% + 10px);width:260px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px;display:grid;gap:2px;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 20px 50px -20px #000}
+.theme.open .theme-menu{opacity:1;transform:none;pointer-events:auto}
+.theme-menu button{display:flex;gap:12px;align-items:center;text-align:left;background:none;border:0;border-radius:10px;padding:10px;color:var(--paper);cursor:pointer;font:inherit}
+.theme-menu button:hover{background:var(--line)}
+.theme-menu button.on{background:color-mix(in srgb,var(--signal) 14%,transparent)}
+.theme-menu button.on b{color:var(--signal)}
+.theme-menu button.on::after{content:"✓";margin-left:auto;color:var(--signal)}
+.theme-menu b{display:block;font:500 14px/1.2 var(--sans)}
+.theme-menu small{font-size:11px;color:var(--slate)}
+.sw{width:22px;height:22px;border-radius:6px;flex:none;background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50% 100%);box-shadow:inset 0 0 0 2px var(--c)}
 
 /* ---------- hero ---------- */
 .hero{height:230vh;position:relative}
@@ -57,7 +83,7 @@ nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom
 #field{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:none}
 .hero-copy{position:absolute;left:var(--gutter);top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;max-width:min(560px,40vw);pointer-events:none;z-index:2}
 .hero-copy > *{pointer-events:auto}
-.hero h1{font-size:clamp(56px,8.4vw,132px);margin:22px 0 26px;position:relative;height:2em}
+.hero h1{font-size:clamp(56px,8.4vw,132px);margin:26px 0 26px;position:relative;height:2em}
 .hero h1 span{position:absolute;left:0;top:0;transition:opacity .7s,transform .7s,filter .7s;white-space:nowrap}
 .hero h1 .b{opacity:0;transform:translateY(20px);filter:blur(8px)}
 .hero.resolved h1 .a{opacity:0;transform:translateY(-20px);filter:blur(8px)}
@@ -94,7 +120,7 @@ nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom
 .stage-col{position:relative}
 .stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center}
 .stage-box{position:relative;width:min(100%,560px);aspect-ratio:1/1;border:1px solid var(--line);border-radius:20px;background:
-  radial-gradient(circle at 50% 50%,rgba(47,214,168,.06),transparent 60%),
+  radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--signal) 8%,transparent),transparent 60%),
   repeating-linear-gradient(0deg,transparent 0 39px,rgba(31,46,64,.5) 39px 40px),
   repeating-linear-gradient(90deg,transparent 0 39px,rgba(31,46,64,.5) 39px 40px);overflow:hidden}
 .stage-box .corner{position:absolute;top:16px;left:18px;color:var(--slate)}
@@ -131,7 +157,7 @@ nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom
 .acard li{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--ink-2)}
 .acard li .ck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--slate);flex:none;position:relative}
 .acard li.done .ck{background:var(--signal);border-color:var(--signal)}
-.acard li.done .ck::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.acard li.done .ck::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--on-accent);border-width:0 2px 2px 0;transform:rotate(45deg)}
 .acard li .mono{margin-left:auto;font-size:10px;color:var(--slate)}
 .acard .spark{margin-top:14px;height:50px}
 
@@ -188,7 +214,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .brow .g{font:400 24px/1 var(--serif);text-align:center}
 .brow .pn{font-family:var(--mono);color:var(--signal)}
 .brow .fl{font:12px var(--mono);color:var(--slate)}
-.brow.me{border-color:var(--signal);background:rgba(47,214,168,.06)}
+.rtag{font:500 10px/1 var(--sans);font-style:normal;letter-spacing:.04em;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:99px;padding:3px 7px;margin-left:6px;vertical-align:2px}
+.brow.me{border-color:var(--signal);background:color-mix(in srgb,var(--signal) 7%,transparent)}
 .brow.warn .fl{color:var(--loss)}
 .board-wrap{position:relative}
 
@@ -206,6 +233,46 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 .card .back h3{font-style:italic}
 .card .glyph{height:90px;margin-top:auto;margin-bottom:18px}
 .card .glyph path{fill:none;stroke-width:2}
+
+/* ---------- training arc ---------- */
+.arc{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.arc::before{content:"";position:absolute;right:-200px;top:10%;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--gold) 10%,transparent),transparent 65%);pointer-events:none}
+.arc-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,5vw,80px);align-items:center;position:relative}
+.arc p.lead{color:var(--mist);margin-top:24px;max-width:480px}
+.arc p.lead b{color:var(--paper);font-weight:500}
+.roles{margin-top:32px;display:grid;gap:10px;max-width:480px}
+.roles div{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line);font-size:15px;color:var(--mist)}
+.roles b{font:500 11px/1.6 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.xp-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px}
+.xp-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;flex-wrap:wrap}
+.xp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.xp-stats > div{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--ink-2);min-height:116px;display:flex;flex-direction:column;justify-content:center}
+.xp-stats small{display:block;font:500 10px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mist)}
+.xp-stats strong{font:600 26px/1.2 var(--sans);color:var(--signal);font-variant-numeric:tabular-nums}
+.xp-stats .rank strong{color:var(--paper);font-size:22px}
+.xp-stats .meta{font-size:11px;color:var(--slate);display:flex;justify-content:space-between;gap:6px;margin-top:6px}
+.lvl{align-self:flex-start;font:600 10px/1 var(--sans);color:var(--signal);border:1px solid color-mix(in srgb,var(--signal) 50%,transparent);background:color-mix(in srgb,var(--signal) 12%,transparent);border-radius:6px;padding:5px 7px;margin-bottom:8px}
+.xpbar{height:6px;border-radius:4px;background:var(--line);margin-top:8px;overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--signal);border-radius:4px;transition:width .9s cubic-bezier(.2,.9,.3,1)}
+.streak{display:flex;gap:12px;align-items:center}
+.streak .fl{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,#FF7A2F 14%,transparent);border:1px solid color-mix(in srgb,#FF7A2F 40%,transparent);flex:none}
+.streak .fl svg{width:18px;animation:flick 1.2s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(.92) rotate(-4deg)}to{transform:scale(1.05) rotate(3deg)}}
+.streak em{font-style:normal;font-size:11px;color:var(--gold);display:block}
+.hexes{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+.hex{background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:14px 8px 12px;text-align:center;cursor:pointer;transition:transform .3s,border-color .3s,background .3s;font:inherit;color:var(--paper)}
+.hex:hover{transform:translateY(-4px)}
+.hex.on{border-color:color-mix(in srgb,var(--gold) 60%,transparent);background:color-mix(in srgb,var(--gold) 6%,var(--ink-2))}
+.hex svg{width:100%;max-width:78px;display:block;margin:0 auto 8px;overflow:visible}
+.hex .ring{fill:color-mix(in srgb,var(--gold) 10%,var(--panel));stroke:color-mix(in srgb,var(--gold) 45%,transparent);stroke-width:1.5}
+.hex .core{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hex.on .core{filter:drop-shadow(0 0 6px var(--gold))}
+.hex.locked .core,.hex.locked .ring{opacity:.35}
+.hex b{display:block;font:500 13px/1.2 var(--sans)}
+.hex small{display:inline-flex;gap:4px;align-items:center;margin-top:6px;font:500 10px/1 var(--mono);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent);border-radius:99px;padding:3px 7px}
+.hex small::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.hex-caption{margin-top:14px;font-size:14px;color:var(--mist);min-height:2.8em}
+.hex-caption b{color:var(--paper);font-weight:500}
 
 /* ---------- ledger ---------- */
 .ledger{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line)}
@@ -229,7 +296,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 
 /* ---------- apply ---------- */
 .apply{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
-.apply::before{content:"";position:absolute;width:900px;height:900px;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(47,214,168,.12),transparent 60%);pointer-events:none}
+.apply::before{content:"";position:absolute;width:900px;height:900px;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,color-mix(in srgb,var(--signal) 14%,transparent),transparent 60%);pointer-events:none}
 .apply-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);position:relative}
 .path{list-style:none;margin-top:36px;display:grid;gap:0}
 .path li{display:grid;grid-template-columns:90px 1fr;padding:18px 0;border-top:1px solid var(--line)}
@@ -255,7 +322,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 .mega em{color:var(--signal)}
 .mega .dim{color:transparent;-webkit-text-stroke:1px var(--slate)}
 .mega sup{font:500 12px/1 var(--mono);letter-spacing:.14em;color:var(--gold);text-transform:uppercase;align-self:center}
-.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:80px;color:var(--slate)}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:80px;color:var(--slate)}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(40px);transition:opacity 1s,transform 1s cubic-bezier(.2,.9,.3,1)}
@@ -265,6 +332,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 @media (max-width:1000px){
   .lab{grid-template-columns:1fr 1fr}.lab .controls{grid-column:1/-1}
   .deck{grid-template-columns:1fr}
+  .arc-grid{grid-template-columns:1fr}
   .card{height:340px}
 }
 @media (max-width:820px){
@@ -287,7 +355,11 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   .brow{grid-template-columns:28px 1fr 56px;gap:10px}
   .brow .pn{grid-column:2}.brow .fl{grid-column:2/-1}
   .brow .g{grid-row:1;grid-column:3}
-  nav .btn.ghost{display:none}
+  nav .btn.ghost:not(.theme-btn){display:none}
+  .theme-btn{padding:10px 12px}.theme-btn .lbl{display:none}
+  .logo .wordmark{height:32px}
+  .xp-stats{grid-template-columns:1fr 1fr}.xp-stats .streak-box{grid-column:1/-1;min-height:0}
+  .hexes{grid-template-columns:repeat(5,1fr);gap:6px}.hex{padding:10px 4px}.hex b{font-size:11px}.hex small{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -299,10 +371,29 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 
 <nav id="nav">
   <a class="logo" href="#top" aria-label="AlphaKio home">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18 9 9l4 5 8-11" stroke="#2FD6A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="3" r="2" fill="#E5C05B"/></svg>
-    Alpha<b>Kio</b>
+    <svg class="wordmark" viewBox="22 28 186 64" aria-hidden="true">
+      <defs>
+        <pattern id="stripes" width="4" height="3.4" patternUnits="userSpaceOnUse"><rect width="4" height="2.2" fill="#fff"/></pattern>
+        <mask id="alphaMask"><rect x="0" y="0" width="240" height="120" fill="url(#stripes)"/></mask>
+      </defs>
+      <g mask="url(#alphaMask)" transform="skewX(-10) translate(12 0)" fill="none" stroke="currentColor" stroke-width="10.5" stroke-linejoin="miter" stroke-linecap="butt">
+        <path d="M70 46 H48 L31 70 L43 84 H74"/>
+        <path d="M57 86 L97 38"/><path d="M62 44 L99 86"/>
+      </g>
+      <text x="101" y="48" font-family="Inter,sans-serif" font-weight="300" font-size="17" fill="currentColor" letter-spacing=".3">alpha</text>
+      <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
+    </svg>
   </a>
   <div class="cta-row">
+    <div class="theme">
+      <button class="btn ghost sm theme-btn" id="themeBtn" aria-haspopup="true" aria-expanded="false"><span class="lbl">Theme</span> <span class="dots"><i></i><i></i></span></button>
+      <div class="theme-menu" id="themeMenu" role="menu">
+        <button role="menuitem" data-t="slate"><span class="sw" style="--a:#2FD6A8;--b:#E5C05B;--c:#121D2B"></span><span><b>Deep Slate</b><small>Deep teal &amp; amber on slate</small></span></button>
+        <button role="menuitem" data-t="violet"><span class="sw" style="--a:#9B6BFF;--b:#F4A6C8;--c:#1A1525"></span><span><b>Obsidian Violet</b><small>Electric violet &amp; soft rose</small></span></button>
+        <button role="menuitem" data-t="ocean"><span class="sw" style="--a:#4C6FFF;--b:#3DDC97;--c:#161A22"></span><span><b>Midnight Ocean</b><small>Electric blue &amp; mint accents</small></span></button>
+        <button role="menuitem" data-t="ember"><span class="sw" style="--a:#FF7A2F;--b:#F5C04A;--c:#1D1814"></span><span><b>Carbon Ember</b><small>Warm orange &amp; gold glow</small></span></button>
+      </div>
+    </div>
     <a class="btn ghost sm" href="#how">How it works</a>
     <a class="btn sm" href="#apply">Apply <span class="arr">→</span></a>
   </div>
@@ -314,7 +405,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     <canvas id="field" aria-hidden="true"></canvas>
     <div class="hero-fade"></div>
     <div class="hero-copy">
-      <span class="eyebrow">Founding Traders · Cohort #1 · Crypto first</span>
+      <span class="chip"><i></i>Founding Traders · Cohort #1 · Crypto first</span>
       <h1><span class="a">The market<br>is <em>noise</em>.</span><span class="b">Your method<br>is the <em>signal</em>.</span></h1>
       <p class="lede">Show us how you trade. <b>We'll turn it into something your community can learn from</b> — your workflow, built into your own Alpha, practised step by step.</p>
       <div class="cta-row">
@@ -327,13 +418,13 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 </section>
 
 <div class="ticker" aria-hidden="true"><div>
-  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span>
-  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span>
+  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span><span>Sensei writes the scroll · students earn the rank<i>◆</i></span>
+  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span><span>Sensei writes the scroll · students earn the rank<i>◆</i></span>
 </div></div>
 
 <!-- ================= PROBLEM ================= -->
 <section class="problem"><div class="wrap">
-  <span class="eyebrow rv">The educator's problem</span>
+  <span class="chip rv"><i></i>The educator's problem</span>
   <h2 class="rv" style="margin-top:20px">Your edge lives in<br><em>eight tabs</em> and your head.</h2>
   <div class="quotes">
     <blockquote class="rv">“I explain my setup in every livestream and people still don't get it.”<cite>— Every trading educator</cite></blockquote>
@@ -373,7 +464,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
               <li><span class="ck"></span>Check funding before sizing<span class="mono">Live · Thu</span></li>
               <li><span class="ck"></span>Place invalidation first<span class="mono">Lesson 4</span></li>
             </ol>
-            <svg class="spark" viewBox="0 0 300 50" preserveAspectRatio="none"><path d="M0 40 L30 36 L60 38 L90 28 L120 30 L150 20 L180 24 L210 14 L240 17 L270 8 L300 10" fill="none" stroke="#2FD6A8" stroke-width="2"/></svg>
+            <svg class="spark" viewBox="0 0 300 50" preserveAspectRatio="none"><path d="M0 40 L30 36 L60 38 L90 28 L120 30 L150 20 L180 24 L210 14 L240 17 L270 8 L300 10" fill="none" style="stroke:var(--signal)" stroke-width="2"/></svg>
           </div>
         </div>
 
@@ -383,9 +474,9 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   </div>
   <div class="steps-col">
     <article class="step" data-i="0"><span class="n">01</span><h3>Record how you trade.</h3><p>Send us your real sessions — screen, voice, the messy bits. No script, no polish. The way you actually decide is the valuable part.</p><div class="mono">Phase 0 · Record</div></article>
-    <article class="step" data-i="1"><span class="n">02</span><h3>We extract the blueprint.</h3><p>Our AI pipeline turns the recording into an Alpha Blueprint: what you look at, in what order, what makes you act, and what makes you walk away.</p><div class="mono">Phase 1 · Build</div></article>
+    <article class="step" data-i="1"><span class="n">02</span><h3>We write the scroll.</h3><p>Our AI pipeline turns the recording into an Alpha Blueprint — your technique, written down: what you look at, in what order, what makes you act, and what makes you walk away.</p><div class="mono">Phase 1 · Build</div></article>
     <article class="step" data-i="2"><span class="n">03</span><h3>It becomes your Alpha.</h3><p>We build your workflow into your own Alpha — free, including any new modules it needs. You refine it until you'd trade from it yourself. Your lessons, videos and live events plug into the exact step they explain.</p><div class="mono">Phase 2 · Teach</div></article>
-    <article class="step" data-i="3"><span class="n">04</span><h3>Your community practises it.</h3><p>Members run your Alpha in paper-trading practice mode, with XP, streaks and progress. They learn the <em>why</em>, not just the entry.</p><div class="mono">Phase 3 · Grow</div></article>
+    <article class="step" data-i="3"><span class="n">04</span><h3>Your students train it.</h3><p>You're the sensei. Members run your Alpha in paper-trading practice mode, earning XP, keeping streaks and ranking up. They learn the <em>why</em>, not just the entry.</p><div class="mono">Phase 3 · Grow</div></article>
   </div>
 </div></section>
 
@@ -439,7 +530,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   <div class="deck rv">
     <div class="card" tabindex="0" role="button" aria-label="Flip RSI card">
       <div class="face"><span class="eyebrow">Momentum family</span><h3>RSI</h3><p>Measures how stretched recent gains are versus recent losses. Above 70 reads “overbought”.</p>
-        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 70 C40 70 50 20 90 25 S140 15 200 10" stroke="#2FD6A8"/></svg>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 70 C40 70 50 20 90 25 S140 15 200 10" style="stroke:var(--signal)"/></svg>
         <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
       <div class="face back"><span class="eyebrow">When it lies</span><h3>In a real trend.</h3><p>Strong trends can sit “overbought” for weeks. Shorting every 70 print is how trend-followers get paid by you.</p>
         <svg class="glyph" viewBox="0 0 200 90"><path d="M0 80 L40 60 L80 40 L120 26 L160 14 L200 4" stroke="#E86A76"/></svg>
@@ -447,7 +538,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     </div>
     <div class="card" tabindex="0" role="button" aria-label="Flip funding card">
       <div class="face"><span class="eyebrow">Positioning family</span><h3>Funding rate</h3><p>What perp longs pay shorts (or the reverse). High positive funding means crowded longs.</p>
-        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 45 H40 V25 H80 V55 H120 V20 H160 V45 H200" stroke="#4C9FFF"/></svg>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 45 H40 V25 H80 V55 H120 V20 H160 V45 H200" style="stroke:var(--gold)"/></svg>
         <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
       <div class="face back"><span class="eyebrow">When it lies</span><h3>When crowds are right.</h3><p>Crowded doesn't mean wrong. Funding can stay hot through an entire leg up — it tells you the cost of being early, not the top.</p>
         <svg class="glyph" viewBox="0 0 200 90"><path d="M0 60 H200 M0 70 C60 70 100 30 200 20" stroke="#E86A76"/></svg>
@@ -455,7 +546,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     </div>
     <div class="card" tabindex="0" role="button" aria-label="Flip volume card">
       <div class="face"><span class="eyebrow">Participation family</span><h3>Volume spike</h3><p>A burst of traded size versus the recent average. Often read as conviction behind a move.</p>
-        <svg class="glyph" viewBox="0 0 200 90"><path d="M10 80 V70 M30 80 V72 M50 80 V68 M70 80 V74 M90 80 V20 M110 80 V66 M130 80 V70 M150 80 V72 M170 80 V69 M190 80 V73" stroke="#E5C05B"/></svg>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M10 80 V70 M30 80 V72 M50 80 V68 M70 80 V74 M90 80 V20 M110 80 V66 M130 80 V70 M150 80 V72 M170 80 V69 M190 80 V73" style="stroke:var(--gold)"/></svg>
         <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
       <div class="face back"><span class="eyebrow">When it lies</span><h3>It's a liquidation.</h3><p>A cascade of forced sells prints huge volume with zero conviction behind it. Check open interest before you call it “smart money”.</p>
         <svg class="glyph" viewBox="0 0 200 90"><path d="M0 20 L80 24 L95 78 L110 60 L200 58" stroke="#E86A76"/></svg>
@@ -464,9 +555,36 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   </div>
 </div></section>
 
+<!-- ================= TRAINING ARC ================= -->
+<section class="arc"><div class="wrap arc-grid">
+  <div>
+    <span class="chip rv"><i></i>Inside the app · practice mode</span>
+    <h2 class="rv" style="margin-top:20px">Every sensei<br>needs a <em>dojo</em>.</h2>
+    <p class="lead rv">Your students don't just watch you trade. <b>They train your technique</b>, earn XP, keep their streaks and rank up, one stage at a time.</p>
+    <div class="roles rv">
+      <div><b>Sensei</b>You. The trader whose method is worth learning.</div>
+      <div><b>Scroll</b>Your Alpha: the technique, step by step, in your order.</div>
+      <div><b>Dojo</b>Your community's space, with your lessons wired to each step.</div>
+      <div><b>Rank</b>Earned by training, one stage at a time.</div>
+    </div>
+  </div>
+  <div class="rv">
+    <div class="xp-card">
+      <div class="top"><span class="chip">XP overview</span><span class="tag">Example student · simulated</span></div>
+      <div class="xp-stats">
+        <div><small>Global XP balance</small><strong id="xpTotal">0</strong><div class="meta"><span id="xpLife">—</span></div></div>
+        <div class="rank"><span class="lvl" id="xpLvl">LVL 1</span><small id="xpRankLbl">Level 1 rank</small><strong id="xpRank">Rookie</strong><div class="meta"><span id="xpNow">0 / 1,000 XP</span><span id="xpLeft"></span></div><div class="xpbar"><i id="xpBar" style="width:0"></i></div></div>
+        <div class="streak-box"><div class="streak"><span class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="#FF7A2F" stroke-width="2" stroke-linejoin="round"><path d="M12 3c1.5 3 5 4.5 5 9.5a5 5 0 0 1-10 0c0-3 2-4 2.5-6 1 1.3 1.5 2.3 2.5 2.8.4-2 .3-4-.0-6.3z"/></svg></span><div><small>Active daily streak</small><strong style="color:var(--paper)"><span id="xpStreak">1</span> <span style="font-size:15px;font-weight:500">days</span></strong><em>Active · earning bonus XP</em></div></div></div>
+      </div>
+      <div class="hexes" id="hexes"><button class="hex" data-i="0" type="button"><svg viewBox="0 0 80 80" aria-hidden="true"><path class="ring" d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z"/><g class="core"><circle cx="40" cy="40" r="15"/><circle cx="40" cy="40" r="8" stroke-dasharray="3 3"/><circle cx="40" cy="40" r="2" fill="currentColor"/></g></svg><b>Rookie</b><small>I</small></button><button class="hex" data-i="1" type="button"><svg viewBox="0 0 80 80" aria-hidden="true"><path class="ring" d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z"/><g class="core"><path d="M24 34 H46 a6 6 0 1 0 -6 -6"/><path d="M24 42 H54 a6 6 0 1 1 -6 6"/><path d="M28 50 H40"/></g></svg><b>Explorer</b><small>II</small></button><button class="hex" data-i="2" type="button"><svg viewBox="0 0 80 80" aria-hidden="true"><path class="ring" d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z"/><g class="core"><path d="M40 24 C46 33 52 39 52 46 a12 12 0 0 1 -24 0 C28 39 34 33 40 24 Z"/><path d="M35 47 a5 5 0 0 0 5 5"/></g></svg><b>Regular</b><small>III</small></button><button class="hex" data-i="3" type="button"><svg viewBox="0 0 80 80" aria-hidden="true"><path class="ring" d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z"/><g class="core"><path d="M40 22 C44 30 52 34 52 45 a12 12 0 0 1 -24 0 C28 38 33 35 34 29 C37 33 38 36 40 37 C41 32 40 27 40 22 Z"/></g></svg><b>Veteran</b><small>IV</small></button><button class="hex" data-i="4" type="button"><svg viewBox="0 0 80 80" aria-hidden="true"><path class="ring" d="M40 4 L71 22 L71 58 L40 76 L9 58 L9 22 Z"/><g class="core"><path d="M44 21 L30 43 H40 L36 59 L51 36 H41 Z"/></g></svg><b>Expert</b><small>V</small></button></div>
+      <p class="hex-caption" id="hexCap"></p>
+    </div>
+  </div>
+</div></section>
+
 <!-- ================= LEDGER ================= -->
 <section class="ledger"><div class="wrap">
-  <span class="eyebrow rv">We audit ourselves first</span>
+  <span class="chip rv"><i></i>We audit ourselves first</span>
   <h2 class="rv" style="margin-top:20px">What's the offer.<br><em>What we're building.</em></h2>
   <p class="rv" style="color:var(--mist);max-width:580px;margin-top:22px">A platform built on proof shouldn't blur the line between today and the roadmap. So here it is, in two columns.</p>
   <div class="cols rv">
@@ -496,7 +614,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 <!-- ================= SEATS ================= -->
 <section class="seats"><div class="wrap seats-grid">
   <div>
-    <span class="eyebrow rv">Limited by design</span>
+    <span class="chip rv"><i></i>Limited by design</span>
     <h2 class="rv" style="margin-top:20px">Small is<br>the <em>product</em>.</h2>
     <p class="rv">At 50,000 users, you build features for committees. We cap the cohort so we can build around the actual people inside it. <b>The Founding Traders shape what ships next</b>, and every Alpha carries its market and instrument type from day one, so forex and equities get added without starting over.</p>
     <p class="rv mono" style="color:var(--slate)">Crypto first · spot, perps and futures</p>
@@ -507,7 +625,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
 <!-- ================= APPLY ================= -->
 <section class="apply" id="apply"><div class="wrap apply-grid">
   <div>
-    <span class="eyebrow rv">Apply · Founding Traders</span>
+    <span class="chip rv"><i></i>Apply · Founding Traders</span>
     <h2 class="rv" style="margin-top:20px">Show us<br>how you <em>trade</em>.</h2>
     <p class="rv" style="color:var(--mist);margin-top:22px;max-width:460px">We're looking for traders with a distinctive, repeatable process: “I do X, then Y, then Z.” Engagement matters more than follower count.</p>
     <ol class="path rv">
@@ -536,7 +654,15 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     <div><span>Prove</span><span class="dim">your</span><em>alpha.</em><sup>Later phase</sup></div>
     <div><span>Share</span><span class="dim">your</span><em>alpha.</em></div>
   </div>
-  <div class="foot-row mono"><span>© 2026 AlphaKio</span><span>Educational platform · not financial advice</span><a href="#top">Back to top ↑</a></div>
+  <div class="foot-row mono"><a class="logo" href="#top" aria-label="AlphaKio home"><svg class="wordmark" viewBox="22 28 186 64" aria-hidden="true">
+      
+      <g mask="url(#alphaMask)" transform="skewX(-10) translate(12 0)" fill="none" stroke="currentColor" stroke-width="10.5" stroke-linejoin="miter" stroke-linecap="butt">
+        <path d="M70 46 H48 L31 70 L43 84 H74"/>
+        <path d="M57 86 L97 38"/><path d="M62 44 L99 86"/>
+      </g>
+      <text x="101" y="48" font-family="Inter,sans-serif" font-weight="300" font-size="17" fill="currentColor" letter-spacing=".3">alpha</text>
+      <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
+    </svg></a><span>© 2026 AlphaKio</span><span>Educational platform · not financial advice</span><a href="#top">Back to top ↑</a></div>
 </div></footer>
 
 <script>
@@ -558,7 +684,10 @@ let W,H,DPR,parts=[],candles=[],mouse={x:-9999,y:-9999,on:false},lens={x:-9999,y
 const RAMP_N=10;
 const hex = h => [1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 const mixRamp = (a,b) => Array.from({length:RAMP_N},(_,i)=>{const t=i/(RAMP_N-1),A=hex(a),B=hex(b);return`rgb(${A.map((v,k)=>Math.round(lerp(v,B[k],t))).join(',')})`});
-const rampUp = mixRamp('#6b7b92','#2FD6A8'), rampDn = mixRamp('#6b7b92','#E86A76');
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+let rampUp, rampDn, sigRGB;
+function readTheme(){ rampUp=mixRamp(cssVar('--mist'),cssVar('--signal')); rampDn=mixRamp(cssVar('--mist'),cssVar('--loss')); sigRGB=hex(cssVar('--signal')).join(','); }
+readTheme();
 
 function build(){
   DPR = Math.min(devicePixelRatio||1,2);
@@ -619,13 +748,13 @@ function frame(now){
   // the lens
   if(sp<.98){
     const a=1-sp;
-    ctx.strokeStyle=`rgba(47,214,168,${.7*a})`; ctx.lineWidth=1;
+    ctx.strokeStyle=`rgba(${sigRGB},${.7*a})`; ctx.lineWidth=1;
     ctx.setLineDash([3,5]); ctx.lineDashOffset=-t*12;
     ctx.beginPath(); ctx.arc(lens.x,lens.y,R,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
     ctx.beginPath();
     for(const [ax,ay,bx,by] of [[-R-10,0,-R+8,0],[R-8,0,R+10,0],[0,-R-10,0,-R+8],[0,R-8,0,R+10]]){ctx.moveTo(lens.x+ax,lens.y+ay);ctx.lineTo(lens.x+bx,lens.y+by);}
     ctx.stroke();
-    ctx.fillStyle=`rgba(47,214,168,${.9*a})`; ctx.font='500 10px "JetBrains Mono", monospace';
+    ctx.fillStyle=`rgba(${sigRGB},${.9*a})`; ctx.font='500 10px "JetBrains Mono", monospace';
     ctx.fillText('SIGNAL ISOLATED', lens.x-R*.5, lens.y-R-16);
     ctx.fillStyle=`rgba(124,140,161,${.8*a})`;
     ctx.fillText(`x:${Math.round(lens.x)} y:${Math.round(lens.y)}`, lens.x-R*.5, lens.y+R+24);
@@ -671,7 +800,7 @@ document.querySelectorAll('.step').forEach(s=>sio.observe(s));
 const iT=document.getElementById('iTrades'),iA=document.getElementById('iAssets'),segP=document.getElementById('iPeriods');
 let periods=1, rankBy='pnl';
 const letters=['D','D+','C-','C','C+','B-','B','B+','A-','A'];
-const gColor=s=>s<.35?'#E86A76':s<.65?'#E5C05B':'#2FD6A8';
+const gColor=s=>s<.35?cssVar('--loss'):s<.65?cssVar('--warn'):cssVar('--signal');
 function curve(trades,seed){
   const r=rng(seed), n=Math.max(trades,4); let v=0,pts=[];
   // small samples: few big lucky jumps. large samples: many small noisy steps.
@@ -700,20 +829,20 @@ function render(){
   const rows=[['Sample size',s.s1,`${s.trades} trades`],['Periods tested',s.s2,`${periods} of 3`],['Assets tested',s.s3,`${s.assets} of 4`]];
   document.getElementById('bars').innerHTML=rows.map(([k,v,l])=>`<div class="row">${k}<span>${l}</span><div class="track"><i style="width:${Math.max(8,v*100)}%;background:${gColor(v)}"></i></div></div>`).join('');
   const v=document.getElementById('verdict');
-  const verdict = s.trades<15 ? ['Likely overfit. Run it on more trades.','#E86A76']
-    : periods<2 ? ['One regime only. Test a second period.','#E5C05B']
-    : s.assets<2 ? ['Works on one asset. Try another.','#E5C05B']
-    : s.total>.8 ? ['Holds up across regimes. This one earned it.','#2FD6A8']
-    : ['Getting sturdier. Keep widening the test.','#2FD6A8'];
+  const verdict = s.trades<15 ? ['Likely overfit. Run it on more trades.',cssVar('--loss')]
+    : periods<2 ? ['One regime only. Test a second period.',cssVar('--warn')]
+    : s.assets<2 ? ['Works on one asset. Try another.',cssVar('--warn')]
+    : s.total>.8 ? ['Holds up across regimes. This one earned it.',cssVar('--signal')]
+    : ['Getting sturdier. Keep widening the test.',cssVar('--signal')];
   v.textContent='→ '+verdict[0]; v.style.color=verdict[1];
   renderBoard(pnl,gi,s);
 }
 function renderBoard(pnl,gi,s){
   const rows=[
-    {h:'@quietedge',p:1210,g:8,f:'94 trades · 3 periods · 4 assets'},
-    {h:'@meanrev_mika',p:2480,g:6,f:'41 trades · 2 periods'},
-    {h:'@yolo420',p:4120,g:0,f:'likely overfit · 6 trades',warn:true},
-    {h:'you',p:pnl,g:gi,f:`${s.trades} trades · ${periods} period${periods>1?'s':''} · ${s.assets} asset${s.assets>1?'s':''}`,me:true,warn:s.trades<15}
+    {h:'@quietedge',rank:'Veteran',p:1210,g:8,f:'94 trades · 3 periods · 4 assets'},
+    {h:'@meanrev_mika',rank:'Regular',p:2480,g:6,f:'41 trades · 2 periods'},
+    {h:'@yolo420',rank:'Rookie',p:4120,g:0,f:'likely overfit · 6 trades',warn:true},
+    {h:'you',rank:'Explorer',p:pnl,g:gi,f:`${s.trades} trades · ${periods} period${periods>1?'s':''} · ${s.assets} asset${s.assets>1?'s':''}`,me:true,warn:s.trades<15}
   ];
   const sorted=[...rows].sort((a,b)=>rankBy==='pnl'?b.p-a.p:b.g-a.g||b.p-a.p);
   const board=document.getElementById('board');
@@ -723,7 +852,7 @@ function renderBoard(pnl,gi,s){
     const r=rows.find(x=>x.h===el.dataset.k), idx=sorted.indexOf(r);
     el.className='brow'+(r.me?' me':'')+(r.warn?' warn':'');
     el.style.position='absolute';el.style.left=0;el.style.right=0;el.style.top=0;
-    el.innerHTML=`<span class="rk">${idx+1}</span><b style="font-weight:500">${r.h}</b><span class="pn">+$${r.p.toLocaleString('en-US')}</span><span class="g" style="color:${gColor(r.g/9)}">${letters[r.g]}</span><span class="fl">${r.f}</span>`;
+    el.innerHTML=`<span class="rk">${idx+1}</span><b style="font-weight:500">${r.h} <em class="rtag">${r.rank}</em></b><span class="pn">+$${r.p.toLocaleString('en-US')}</span><span class="g" style="color:${gColor(r.g/9)}">${letters[r.g]}</span><span class="fl">${r.f}</span>`;
   });
   // measure after filling, since rows wrap to two lines on phones
   const rowH=Math.max(...els.map(el=>el.offsetHeight))+6;
@@ -752,6 +881,55 @@ dots.addEventListener('pointermove',e=>{
     d.classList.toggle('lit',dist<50);});
 });
 dots.addEventListener('pointerleave',()=>dd.forEach(d=>{d.style.transform='';d.classList.remove('lit')}));
+
+/* ================= training arc ================= */
+const RANKS=[
+  {n:'Rookie',lvl:1,xp:420,cap:1000,total:420,streak:1,d:'<b>Stage I · Target.</b> First recognition: the student ran your scroll end to end for the first time.'},
+  {n:'Explorer',lvl:2,xp:1860,cap:3000,total:2310,streak:2,d:'<b>Stage II · Wind.</b> They\'ve tried every module in your Alpha and know what each one is for.'},
+  {n:'Regular',lvl:4,xp:4210,cap:6000,total:7480,streak:5,d:'<b>Stage III · Water.</b> Showing up daily. The routine is starting to feel like theirs.'},
+  {n:'Veteran',lvl:6,xp:8575,cap:10000,total:21955,streak:9,d:'<b>Stage IV · Fire.</b> Keeps training through drawdowns instead of abandoning the method.'},
+  {n:'Expert',lvl:8,xp:14200,cap:20000,total:48310,streak:21,d:'<b>Stage V · Lightning.</b> Executes your technique cold, and can explain every step back to you.'},
+];
+const hexBtns=[...document.querySelectorAll('.hex')];
+let arcIdx=0, arcTimer=null, shownTotal=0;
+const fmt=n=>n.toLocaleString('en-US');
+function countTo(el,from,to){const t0=performance.now();const tick=now=>{const k=Math.min(1,(now-t0)/900);el.textContent=fmt(Math.round(from+(to-from)*ease(k)));if(k<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)}
+function showRank(i){
+  arcIdx=i; const r=RANKS[i];
+  hexBtns.forEach((b,j)=>{b.classList.toggle('on',j===i);b.classList.toggle('locked',j>i)});
+  document.getElementById('xpLvl').textContent='LVL '+r.lvl;
+  document.getElementById('xpRankLbl').textContent=`Level ${r.lvl} rank`;
+  document.getElementById('xpRank').textContent=r.n;
+  document.getElementById('xpNow').textContent=`${fmt(r.xp)} / ${fmt(r.cap)} XP`;
+  document.getElementById('xpLeft').textContent=`${fmt(r.cap-r.xp)} to go`;
+  document.getElementById('xpBar').style.width=(r.xp/r.cap*100)+'%';
+  document.getElementById('xpStreak').textContent=r.streak;
+  document.getElementById('xpLife').textContent=`${fmt(Math.round(r.total*.85))} lifetime`;
+  document.getElementById('hexCap').innerHTML=r.d;
+  countTo(document.getElementById('xpTotal'),shownTotal,r.total); shownTotal=r.total;
+}
+hexBtns.forEach((b,i)=>b.addEventListener('click',()=>{clearInterval(arcTimer);arcTimer=null;showRank(i)}));
+const arcIO=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting&&arcTimer===null&&!e.target.dataset.done){
+    e.target.dataset.done=1; showRank(0);
+    if(!reduce) arcTimer=setInterval(()=>{if(arcIdx>=RANKS.length-1){clearInterval(arcTimer);arcTimer=null;return}showRank(arcIdx+1)},2200);
+  }}),{threshold:.35});
+arcIO.observe(document.querySelector('.xp-card'));
+
+/* ================= theme picker ================= */
+const themeWrap=document.querySelector('.theme'), themeBtn=document.getElementById('themeBtn'), themeMenu=document.getElementById('themeMenu');
+function applyTheme(t){
+  if(t==='slate') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme=t;
+  themeMenu.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  readTheme(); render(); if(reduce) frame(performance.now());
+  try{localStorage.setItem('ak-theme',t)}catch(e){}
+}
+themeBtn.addEventListener('click',e=>{e.stopPropagation();const o=themeWrap.classList.toggle('open');themeBtn.setAttribute('aria-expanded',o)});
+themeMenu.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;applyTheme(b.dataset.t);themeWrap.classList.remove('open');themeBtn.setAttribute('aria-expanded',false)});
+document.addEventListener('click',()=>{themeWrap.classList.remove('open');themeBtn.setAttribute('aria-expanded',false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')themeWrap.classList.remove('open')});
+let savedTheme='slate'; try{savedTheme=localStorage.getItem('ak-theme')||'slate'}catch(e){}
+applyTheme(savedTheme);
 
 /* ================= apply form ================= */
 // TODO: wire to the real intake endpoint (CRM / Founding Trader pipeline). Currently client-side only.
