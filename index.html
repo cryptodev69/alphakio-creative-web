@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlphaKio — Founding Traders</title>
+<meta name="description" content="Show us how you trade. We'll turn it into something your community can learn from.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1420; --ink-2:#0E1724; --panel:#121D2B; --line:#1F2E40;
+  --slate:#55647A; --mist:#7C8CA1; --paper:#E4EDF5;
+  --signal:#2FD6A8; --gold:#E5C05B; --blue:#4C9FFF; --loss:#E86A76;
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --gutter:clamp(16px,4vw,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+::selection{background:var(--signal);color:var(--ink)}
+
+/* film grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--signal)}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;line-height:.95}
+h2{font-size:clamp(44px,7vw,104px)}
+h2 em,h1 em{font-style:italic;color:var(--signal)}
+.wrap{padding:0 var(--gutter);max-width:1440px;margin:0 auto}
+.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:99px;padding:4px 10px;font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+.tag.gold{color:var(--gold);border-color:#4a3f22}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px var(--gutter);mix-blend-mode:normal;transition:background .3s}
+nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.logo{font:500 20px/1 var(--sans);letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo b{color:var(--signal);font-weight:500}
+.logo svg{width:22px;height:22px}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:99px;padding:14px 22px;font:500 15px/1 var(--sans);text-decoration:none;cursor:pointer;border:1px solid var(--signal);background:var(--signal);color:var(--ink);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--signal)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--mist);box-shadow:none}
+.btn.sm{padding:10px 16px;font-size:14px}
+.btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(4px)}
+
+/* ---------- hero ---------- */
+.hero{height:230vh;position:relative}
+.hero-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+#field{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:none}
+.hero-copy{position:absolute;left:var(--gutter);top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;max-width:min(560px,40vw);pointer-events:none;z-index:2}
+.hero-copy > *{pointer-events:auto}
+.hero h1{font-size:clamp(56px,8.4vw,132px);margin:22px 0 26px;position:relative;height:2em}
+.hero h1 span{position:absolute;left:0;top:0;transition:opacity .7s,transform .7s,filter .7s;white-space:nowrap}
+.hero h1 .b{opacity:0;transform:translateY(20px);filter:blur(8px)}
+.hero.resolved h1 .a{opacity:0;transform:translateY(-20px);filter:blur(8px)}
+.hero.resolved h1 .b{opacity:1;transform:none;filter:none}
+.hero p.lede{color:var(--mist);font-size:clamp(17px,1.4vw,20px);max-width:470px;margin-bottom:32px}
+.hero p.lede b{color:var(--paper);font-weight:500}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.hint{position:absolute;right:var(--gutter);bottom:28px;z-index:2;color:var(--slate);display:flex;gap:18px;align-items:center}
+.hint .bar{width:120px;height:2px;background:var(--line);position:relative;overflow:hidden;border-radius:2px}
+.hint .bar i{position:absolute;inset:0;background:var(--signal);transform-origin:left;transform:scaleX(0)}
+.hero-fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,rgba(11,20,32,.85) 28%,rgba(11,20,32,0) 52%);pointer-events:none;z-index:1}
+
+/* ticker */
+.ticker{border-block:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:14px 0;background:var(--ink-2)}
+.ticker div{display:inline-block;animation:tick 40s linear infinite}
+.ticker span{font:500 13px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mist);margin-right:48px}
+.ticker span i{font-style:normal;color:var(--signal);margin-right:48px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- problem ---------- */
+.problem{padding:clamp(100px,16vh,180px) 0}
+.quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:64px}
+.quotes blockquote{background:var(--ink);padding:clamp(24px,3vw,44px);font:italic 400 clamp(24px,2.4vw,36px)/1.15 var(--serif);color:var(--paper);position:relative;transition:background .3s}
+.quotes blockquote:hover{background:var(--ink-2)}
+.quotes blockquote cite{display:block;margin-top:18px;font:500 11px/1 var(--mono);letter-spacing:.16em;color:var(--slate);font-style:normal;text-transform:uppercase}
+.strike{position:relative;display:inline}
+.problem .answer{margin-top:64px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.problem .answer p{color:var(--mist);font-size:19px;max-width:520px}
+.problem .answer p b{color:var(--paper);font-weight:500}
+
+/* ---------- pipeline (sticky stage) ---------- */
+.pipeline{position:relative;border-top:1px solid var(--line)}
+.pipe-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,5vw,80px)}
+.stage-col{position:relative}
+.stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center}
+.stage-box{position:relative;width:min(100%,560px);aspect-ratio:1/1;border:1px solid var(--line);border-radius:20px;background:
+  radial-gradient(circle at 50% 50%,rgba(47,214,168,.06),transparent 60%),
+  repeating-linear-gradient(0deg,transparent 0 39px,rgba(31,46,64,.5) 39px 40px),
+  repeating-linear-gradient(90deg,transparent 0 39px,rgba(31,46,64,.5) 39px 40px);overflow:hidden}
+.stage-box .corner{position:absolute;top:16px;left:18px;color:var(--slate)}
+.stage-box .corner b{color:var(--signal);font-weight:500}
+.steps-col{padding:30vh 0}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.25;transition:opacity .5s}
+.step.on{opacity:1}
+.step .n{font:400 clamp(80px,9vw,140px)/1 var(--serif);color:transparent;-webkit-text-stroke:1px var(--line);transition:-webkit-text-stroke-color .5s,color .5s}
+.step.on .n{-webkit-text-stroke-color:var(--signal)}
+.step h3{font-size:clamp(36px,4vw,60px);margin:10px 0 18px}
+.step p{color:var(--mist);max-width:460px}
+.step .mono{color:var(--slate);margin-top:22px}
+
+/* stage layers */
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .6s}
+.wave{gap:5px;height:40%}
+.wave i{width:6px;border-radius:3px;background:var(--mist);height:20%;transition:height .6s cubic-bezier(.7,0,.2,1),background .6s,opacity .5s;animation:pulse 1.2s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+.rec{position:absolute;top:18%;display:flex;gap:10px;align-items:center;color:var(--loss)}
+.rec::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--loss);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.nodes svg{position:absolute;inset:0;width:100%;height:100%}
+.nodes svg path{vector-effect:non-scaling-stroke;fill:none;stroke:var(--signal);stroke-width:1.5;stroke-dasharray:6 6;stroke-dashoffset:400;transition:stroke-dashoffset 1.4s .3s;opacity:.7}
+.node{position:absolute;transform:translate(-50%,-50%) scale(.3);opacity:0;transition:transform .7s cubic-bezier(.3,1.5,.5,1),opacity .4s;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:132px}
+.node .mono{font-size:10px;color:var(--slate);display:block;margin-bottom:6px}
+.node strong{font:500 14px/1.3 var(--sans)}
+.node.entry{border-color:var(--signal)}.node.exit{border-color:var(--gold)}.node.risk{border-color:var(--loss)}
+
+.acard{width:78%;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;transform:translateY(30px) scale(.95);transition:transform .7s cubic-bezier(.2,.9,.3,1)}
+.acard header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.acard h4{font:italic 400 28px/1 var(--serif)}
+.acard ol{list-style:none;display:grid;gap:8px}
+.acard li{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;background:var(--ink-2)}
+.acard li .ck{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--slate);flex:none;position:relative}
+.acard li.done .ck{background:var(--signal);border-color:var(--signal)}
+.acard li.done .ck::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.acard li .mono{margin-left:auto;font-size:10px;color:var(--slate)}
+.acard .spark{margin-top:14px;height:50px}
+
+.crowd .mini{position:absolute;width:88px;padding:8px;border-radius:10px;background:var(--panel);border:1px solid var(--line);opacity:0;transform:translate(-50%,-50%) scale(.2);transition:all .8s cubic-bezier(.2,.9,.3,1)}
+.crowd .mini i{display:block;height:4px;border-radius:2px;background:var(--line);margin:4px 0}
+.crowd .mini i:nth-child(1){background:var(--signal);width:70%}
+.crowd .mini b{display:block;font:500 9px/1 var(--mono);color:var(--mist);letter-spacing:.1em}
+.crowd .hub{width:120px;height:120px;border-radius:50%;border:1px solid var(--signal);display:flex;align-items:center;justify-content:center;text-align:center;font:italic 22px/1 var(--serif);box-shadow:0 0 60px -10px var(--signal);opacity:0;transform:scale(.6);transition:all .6s}
+
+.stage[data-step="0"] .l0{opacity:1}.stage:not([data-step="0"]) .l0{opacity:0}
+.stage[data-step="1"] .l1{opacity:1}.stage:not([data-step="1"]) .l1{opacity:0}
+.stage[data-step="2"] .l2{opacity:1}.stage:not([data-step="2"]) .l2{opacity:0}
+.stage[data-step="3"] .l3{opacity:1}.stage:not([data-step="3"]) .l3{opacity:0}
+.stage[data-step="1"] .node{transform:translate(-50%,-50%) scale(1);opacity:1}
+.stage[data-step="1"] .node:nth-child(3){transition-delay:.1s}.stage[data-step="1"] .node:nth-child(4){transition-delay:.2s}.stage[data-step="1"] .node:nth-child(5){transition-delay:.3s}
+.stage[data-step="1"] .nodes svg path{stroke-dashoffset:0}
+.stage[data-step="2"] .acard{transform:none}
+.stage[data-step="3"] .mini{opacity:1}
+.stage[data-step="3"] .hub{opacity:1;transform:none}
+
+/* ---------- dual-track ---------- */
+.dual{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line);background:linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%)}
+.dual-head{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+.dual-head p{color:var(--mist)}
+.lab{display:grid;grid-template-columns:320px 1fr 1fr;gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;position:relative}
+.panel .tag{margin-bottom:22px}
+.ctrl{margin-bottom:26px}
+.ctrl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px}
+.ctrl label output{font-family:var(--mono);color:var(--signal)}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;background:var(--line);border-radius:4px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--paper);border:4px solid var(--signal);cursor:grab}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--paper);border:4px solid var(--signal);cursor:grab}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--ink);padding:4px;border-radius:10px}
+.seg button{background:none;border:0;color:var(--mist);font:500 13px/1 var(--mono);padding:10px 0;border-radius:7px;cursor:pointer}
+.seg button.on{background:var(--line);color:var(--paper)}
+.pnl-big{font:400 clamp(44px,5vw,72px)/1 var(--serif);color:var(--signal);margin:6px 0 4px}
+.pnl-sub{color:var(--slate);font-family:var(--mono);font-size:12px}
+#curve{width:100%;height:140px;margin:18px 0}
+#curve path{fill:none;stroke:var(--signal);stroke-width:2;transition:d .5s}
+.never{color:var(--gold);font:500 13px/1.4 var(--mono)}
+.grade{position:absolute;top:18px;right:20px;width:84px;height:84px;border-radius:50%;border:2px solid var(--signal);display:grid;place-items:center;font:400 42px/1 var(--serif);transition:border-color .4s,color .4s}
+.bars{display:grid;gap:16px;margin-top:58px}
+.bars .row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:14px}
+.bars .track{grid-column:1/-1;height:6px;border-radius:4px;background:var(--ink);overflow:hidden}
+.bars .track i{display:block;height:100%;border-radius:4px;transition:width .5s,background .5s}
+.bars .row span{color:var(--slate);font:12px var(--mono)}
+.verdict{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);font:500 14px/1.4 var(--mono);color:var(--signal)}
+.board{margin-top:16px}
+.board-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.board-top .seg{grid-template-columns:1fr 1fr;min-width:280px}
+.brow{display:grid;grid-template-columns:40px 1.4fr 1fr 70px 2fr;gap:12px;align-items:center;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--ink);margin-bottom:6px;transition:transform .6s cubic-bezier(.2,.9,.3,1);font-size:15px}
+.brow .rk{font:400 26px/1 var(--serif);color:var(--slate)}
+.brow .g{font:400 24px/1 var(--serif);text-align:center}
+.brow .pn{font-family:var(--mono);color:var(--signal)}
+.brow .fl{font:12px var(--mono);color:var(--slate)}
+.brow.me{border-color:var(--signal);background:rgba(47,214,168,.06)}
+.brow.warn .fl{color:var(--loss)}
+.board-wrap{position:relative}
+
+/* ---------- signal school ---------- */
+.school{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line)}
+.deck{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px;perspective:1600px}
+.card{height:400px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,1.3,.4,1)}
+.card.flip{transform:rotateY(180deg)}
+.card .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;padding:28px;display:flex;flex-direction:column;border:1px solid var(--line);background:var(--panel)}
+.card .back{transform:rotateY(180deg);background:linear-gradient(160deg,#2a1519,var(--panel) 60%);border-color:#4a2329}
+.card h3{font-size:44px;margin:18px 0 12px}
+.card p{color:var(--mist);font-size:15px}
+.card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;color:var(--slate)}
+.card .back .eyebrow{color:var(--loss)}
+.card .back h3{font-style:italic}
+.card .glyph{height:90px;margin-top:auto;margin-bottom:18px}
+.card .glyph path{fill:none;stroke-width:2}
+
+/* ---------- ledger ---------- */
+.ledger{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:64px}
+.cols > div{background:var(--ink);padding:clamp(24px,3.5vw,48px)}
+.cols h3{font-size:clamp(30px,3vw,44px);margin:18px 0 26px}
+.cols ul{list-style:none;display:grid;gap:18px}
+.cols li{display:grid;grid-template-columns:28px 1fr;gap:10px;color:var(--mist)}
+.cols li b{color:var(--paper);font-weight:500;display:block}
+.cols li::before{content:"→";color:var(--signal);font-family:var(--mono)}
+.cols .later li::before{content:"◌";color:var(--gold)}
+
+/* ---------- seats ---------- */
+.seats{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line)}
+.seats-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);align-items:center}
+.seats p{color:var(--mist);margin-top:24px;max-width:500px}
+.seats p b{color:var(--paper);font-weight:500}
+#dots{display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(8px,1.4vw,16px);aspect-ratio:1}
+#dots i{border-radius:50%;border:1px solid var(--slate);transition:background .25s,border-color .25s;will-change:transform}
+#dots i.lit{background:var(--signal);border-color:var(--signal)}
+
+/* ---------- apply ---------- */
+.apply{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.apply::before{content:"";position:absolute;width:900px;height:900px;left:50%;top:40%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(47,214,168,.12),transparent 60%);pointer-events:none}
+.apply-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);position:relative}
+.path{list-style:none;margin-top:36px;display:grid;gap:0}
+.path li{display:grid;grid-template-columns:90px 1fr;padding:18px 0;border-top:1px solid var(--line)}
+.path li span{color:var(--slate)}
+.path li b{font-weight:500}
+.path li.later b{color:var(--mist)}
+form{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,3vw,36px);display:grid;gap:16px;align-self:start}
+form label{display:grid;gap:8px;font-size:14px;color:var(--mist)}
+form input,form select,form textarea{background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:var(--paper);font:15px var(--sans);outline:none;transition:border-color .2s;width:100%}
+form input:focus,form select:focus,form textarea:focus{border-color:var(--signal)}
+form textarea{min-height:110px;resize:vertical}
+form .btn{justify-content:center;margin-top:6px}
+.done-msg{display:none;text-align:center;padding:40px 10px}
+.done-msg h3{font-size:44px;margin:14px 0}
+.done-msg p{color:var(--mist)}
+form.sent > :not(.done-msg){display:none}
+form.sent .done-msg{display:block}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;overflow:hidden}
+.mega{font:400 clamp(56px,11vw,190px)/.9 var(--serif);letter-spacing:-.03em}
+.mega div{display:flex;gap:.25em;align-items:baseline;flex-wrap:wrap}
+.mega em{color:var(--signal)}
+.mega .dim{color:transparent;-webkit-text-stroke:1px var(--slate)}
+.mega sup{font:500 12px/1 var(--mono);letter-spacing:.14em;color:var(--gold);text-transform:uppercase;align-self:center}
+.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:80px;color:var(--slate)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s,transform 1s cubic-bezier(.2,.9,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .lab{grid-template-columns:1fr 1fr}.lab .controls{grid-column:1/-1}
+  .deck{grid-template-columns:1fr}
+  .card{height:340px}
+}
+@media (max-width:820px){
+  .hero-copy{max-width:none;right:var(--gutter);justify-content:flex-start;padding-top:110px}
+  .hero h1{font-size:clamp(46px,13vw,80px)}
+  .hero-fade{background:linear-gradient(180deg,var(--ink) 0%,rgba(11,20,32,.9) 42%,rgba(11,20,32,0) 62%)}
+  .hint{left:var(--gutter);right:auto}
+  .quotes,.problem .answer,.dual-head,.cols,.seats-grid,.apply-grid{grid-template-columns:1fr}
+  .pipe-grid{grid-template-columns:1fr}
+  .stage-col{position:sticky;top:60px;z-index:2;height:50vh;background:var(--ink)}
+  .stage{position:relative;height:100%}
+  .stage-box{width:min(100%,380px,46vh)}
+  .acard{width:90%;padding:14px}.acard h4{font-size:20px}.acard header{margin-bottom:10px}
+  .acard li{padding:7px 10px;font-size:12px;gap:8px}.acard .spark{display:none}
+  .node{min-width:0;padding:8px 10px;max-width:44%}.node strong{font-size:12px}
+  .crowd .mini{width:64px}.crowd .hub{width:88px;height:88px;font-size:17px}
+  .steps-col{padding:4vh 0 20vh}
+  .step{min-height:60vh}
+  .lab{grid-template-columns:1fr}
+  .brow{grid-template-columns:28px 1fr 56px;gap:10px}
+  .brow .pn{grid-column:2}.brow .fl{grid-column:2/-1}
+  .brow .g{grid-row:1;grid-column:3}
+  nav .btn.ghost{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="logo" href="#top" aria-label="AlphaKio home">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18 9 9l4 5 8-11" stroke="#2FD6A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="3" r="2" fill="#E5C05B"/></svg>
+    Alpha<b>Kio</b>
+  </a>
+  <div class="cta-row">
+    <a class="btn ghost sm" href="#how">How it works</a>
+    <a class="btn sm" href="#apply">Apply <span class="arr">→</span></a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="hero-sticky">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="hero-fade"></div>
+    <div class="hero-copy">
+      <span class="eyebrow">Founding Traders · Cohort #1 · Crypto first</span>
+      <h1><span class="a">The market<br>is <em>noise</em>.</span><span class="b">Your method<br>is the <em>signal</em>.</span></h1>
+      <p class="lede">Show us how you trade. <b>We'll turn it into something your community can learn from</b> — your workflow, built into your own Alpha, practised step by step.</p>
+      <div class="cta-row">
+        <a class="btn" href="#apply">Become a Founding Trader <span class="arr">→</span></a>
+        <a class="btn ghost" href="#how">See the process</a>
+      </div>
+    </div>
+    <div class="hint mono"><span id="hintTxt">Move the lens · scroll to resolve</span><span class="bar"><i id="hintBar"></i></span></div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div>
+  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span>
+  <span>Proof over trust<i>◆</i></span><span>Capped by design<i>◆</i></span><span>Your workflow, made learnable<i>◆</i></span><span>Spot · Perps · Futures<i>◆</i></span><span>Built with Cohort #1<i>◆</i></span><span>Practise, don't copy<i>◆</i></span>
+</div></div>
+
+<!-- ================= PROBLEM ================= -->
+<section class="problem"><div class="wrap">
+  <span class="eyebrow rv">The educator's problem</span>
+  <h2 class="rv" style="margin-top:20px">Your edge lives in<br><em>eight tabs</em> and your head.</h2>
+  <div class="quotes">
+    <blockquote class="rv">“I explain my setup in every livestream and people still don't get it.”<cite>— Every trading educator</cite></blockquote>
+    <blockquote class="rv">“My members copy my entries without understanding why, then blame me when it fails.”<cite>— Every paid community</cite></blockquote>
+    <blockquote class="rv">“My workflow is eight tabs and my head. There's no way to hand it to someone.”<cite>— Every discretionary trader</cite></blockquote>
+    <blockquote class="rv">“Courses are boring. People drop off after lesson three.”<cite>— Every course creator</cite></blockquote>
+  </div>
+  <div class="answer">
+    <h3 class="rv" style="font-size:clamp(34px,4vw,56px)">So we stopped asking people to <em style="color:var(--signal)">watch</em>.</h3>
+    <p class="rv">On AlphaKio your members see <b>the same screen you see, in the same order</b>, next to your own lessons — and then they practise it themselves.</p>
+  </div>
+</div></section>
+
+<!-- ================= PIPELINE ================= -->
+<section class="pipeline" id="how"><div class="wrap pipe-grid">
+  <div class="stage-col">
+    <div class="stage" id="stage" data-step="0">
+      <div class="stage-box">
+        <div class="corner mono">Pipeline · <b id="stepLbl">01 Record</b></div>
+
+        <div class="layer l0 wave" id="wave"><div class="rec mono">Rec · your trading session</div></div>
+
+        <div class="layer l1 nodes">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M26 30 C 50 30, 50 50, 74 50 M74 50 C 50 50, 50 72, 26 72 M26 72 C 40 86, 60 86, 74 80"/></svg>
+          <div class="node entry" style="left:26%;top:30%"><span class="mono">Entry</span><strong>Reclaim of weekly VWAP</strong></div>
+          <div class="node" style="left:74%;top:46%"><span class="mono">Confirm</span><strong>Funding flips neutral</strong></div>
+          <div class="node exit" style="left:26%;top:72%"><span class="mono">Exit</span><strong>Scale out at prior high</strong></div>
+          <div class="node risk" style="left:74%;top:84%"><span class="mono">Risk</span><strong>1R · invalidate below range</strong></div>
+        </div>
+
+        <div class="layer l2">
+          <div class="acard">
+            <header><h4>The Range Reclaim</h4><span class="tag gold">Your Alpha</span></header>
+            <ol>
+              <li class="done"><span class="ck"></span>Mark the weekly range<span class="mono">Lesson 1</span></li>
+              <li class="done"><span class="ck"></span>Wait for the VWAP reclaim<span class="mono">Lesson 2</span></li>
+              <li><span class="ck"></span>Check funding before sizing<span class="mono">Live · Thu</span></li>
+              <li><span class="ck"></span>Place invalidation first<span class="mono">Lesson 4</span></li>
+            </ol>
+            <svg class="spark" viewBox="0 0 300 50" preserveAspectRatio="none"><path d="M0 40 L30 36 L60 38 L90 28 L120 30 L150 20 L180 24 L210 14 L240 17 L270 8 L300 10" fill="none" stroke="#2FD6A8" stroke-width="2"/></svg>
+          </div>
+        </div>
+
+        <div class="layer l3 crowd" id="crowd"><div class="hub">Your<br>Alpha</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="steps-col">
+    <article class="step" data-i="0"><span class="n">01</span><h3>Record how you trade.</h3><p>Send us your real sessions — screen, voice, the messy bits. No script, no polish. The way you actually decide is the valuable part.</p><div class="mono">Phase 0 · Record</div></article>
+    <article class="step" data-i="1"><span class="n">02</span><h3>We extract the blueprint.</h3><p>Our AI pipeline turns the recording into an Alpha Blueprint: what you look at, in what order, what makes you act, and what makes you walk away.</p><div class="mono">Phase 1 · Build</div></article>
+    <article class="step" data-i="2"><span class="n">03</span><h3>It becomes your Alpha.</h3><p>We build your workflow into your own Alpha — free, including any new modules it needs. You refine it until you'd trade from it yourself. Your lessons, videos and live events plug into the exact step they explain.</p><div class="mono">Phase 2 · Teach</div></article>
+    <article class="step" data-i="3"><span class="n">04</span><h3>Your community practises it.</h3><p>Members run your Alpha in paper-trading practice mode, with XP, streaks and progress. They learn the <em>why</em>, not just the entry.</p><div class="mono">Phase 3 · Grow</div></article>
+  </div>
+</div></section>
+
+<!-- ================= DUAL TRACK ================= -->
+<section class="dual"><div class="wrap">
+  <div class="dual-head">
+    <div>
+      <span class="tag gold rv">Concept · designing it with Cohort #1</span>
+      <h2 class="rv" style="margin-top:22px">Profit never travels<br><em>without its grade.</em></h2>
+    </div>
+    <p class="rv">A lucky backtest looks the same as a good one — until you grade the process. Play with it: shrink the sample, test fewer periods, and watch a great-looking P&amp;L lose its right to be trusted.</p>
+  </div>
+
+  <div class="lab rv">
+    <div class="panel controls">
+      <span class="tag">Your backtest</span>
+      <div class="ctrl"><label>Trades in sample <output id="oTrades">8</output></label><input id="iTrades" type="range" min="3" max="120" value="8"></div>
+      <div class="ctrl"><label>Market periods tested</label><div class="seg" id="iPeriods"><button class="on" data-v="1">1</button><button data-v="2">2</button><button data-v="3">3</button></div></div>
+      <div class="ctrl"><label>Assets tested <output id="oAssets">1</output></label><input id="iAssets" type="range" min="1" max="4" value="1"></div>
+      <p class="pnl-sub" style="line-height:1.6">Simulated numbers for illustration. Nothing here is a real account or a real trader.</p>
+    </div>
+    <div class="panel">
+      <span class="tag">Performance · simulated</span>
+      <div class="pnl-big" id="pnl">+$4,120</div>
+      <div class="pnl-sub" id="pnlSub">$1,000 → $5,120 · win rate 88%</div>
+      <svg id="curve" viewBox="0 0 300 140" preserveAspectRatio="none"><path id="curvePath" d=""/></svg>
+      <div class="never">Never converts to XP.</div>
+    </div>
+    <div class="panel">
+      <span class="tag">Process grade</span>
+      <div class="grade" id="grade">D</div>
+      <div class="bars" id="bars"></div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </div>
+
+  <div class="panel board rv">
+    <div class="board-top">
+      <span class="tag">Leaderboard preview · fictional handles</span>
+      <div class="seg" id="rankBy"><button class="on" data-v="pnl">Rank by profit</button><button data-v="grade">Rank by process</button></div>
+    </div>
+    <div class="board-wrap" id="board"></div>
+  </div>
+</div></section>
+
+<!-- ================= SIGNAL SCHOOL ================= -->
+<section class="school"><div class="wrap">
+  <span class="tag gold rv">Concept · Signal School</span>
+  <h2 class="rv" style="margin-top:22px">Every signal has a<br>card for <em>when it lies</em>.</h2>
+  <p class="rv" style="color:var(--mist);max-width:560px;margin-top:22px">Beginners don't blow up because they don't know an indicator. They blow up because nobody told them when it stops working. Tap a card.</p>
+  <div class="deck rv">
+    <div class="card" tabindex="0" role="button" aria-label="Flip RSI card">
+      <div class="face"><span class="eyebrow">Momentum family</span><h3>RSI</h3><p>Measures how stretched recent gains are versus recent losses. Above 70 reads “overbought”.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 70 C40 70 50 20 90 25 S140 15 200 10" stroke="#2FD6A8"/></svg>
+        <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
+      <div class="face back"><span class="eyebrow">When it lies</span><h3>In a real trend.</h3><p>Strong trends can sit “overbought” for weeks. Shorting every 70 print is how trend-followers get paid by you.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 80 L40 60 L80 40 L120 26 L160 14 L200 4" stroke="#E86A76"/></svg>
+        <div class="foot mono"><span>Quick check · +25 XP</span><span>↻</span></div></div>
+    </div>
+    <div class="card" tabindex="0" role="button" aria-label="Flip funding card">
+      <div class="face"><span class="eyebrow">Positioning family</span><h3>Funding rate</h3><p>What perp longs pay shorts (or the reverse). High positive funding means crowded longs.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 45 H40 V25 H80 V55 H120 V20 H160 V45 H200" stroke="#4C9FFF"/></svg>
+        <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
+      <div class="face back"><span class="eyebrow">When it lies</span><h3>When crowds are right.</h3><p>Crowded doesn't mean wrong. Funding can stay hot through an entire leg up — it tells you the cost of being early, not the top.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 60 H200 M0 70 C60 70 100 30 200 20" stroke="#E86A76"/></svg>
+        <div class="foot mono"><span>Quick check · +25 XP</span><span>↻</span></div></div>
+    </div>
+    <div class="card" tabindex="0" role="button" aria-label="Flip volume card">
+      <div class="face"><span class="eyebrow">Participation family</span><h3>Volume spike</h3><p>A burst of traded size versus the recent average. Often read as conviction behind a move.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M10 80 V70 M30 80 V72 M50 80 V68 M70 80 V74 M90 80 V20 M110 80 V66 M130 80 V70 M150 80 V72 M170 80 V69 M190 80 V73" stroke="#E5C05B"/></svg>
+        <div class="foot mono"><span>What it measures</span><span>Flip ↻</span></div></div>
+      <div class="face back"><span class="eyebrow">When it lies</span><h3>It's a liquidation.</h3><p>A cascade of forced sells prints huge volume with zero conviction behind it. Check open interest before you call it “smart money”.</p>
+        <svg class="glyph" viewBox="0 0 200 90"><path d="M0 20 L80 24 L95 78 L110 60 L200 58" stroke="#E86A76"/></svg>
+        <div class="foot mono"><span>Quick check · +25 XP</span><span>↻</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= LEDGER ================= -->
+<section class="ledger"><div class="wrap">
+  <span class="eyebrow rv">We audit ourselves first</span>
+  <h2 class="rv" style="margin-top:20px">What's the offer.<br><em>What we're building.</em></h2>
+  <p class="rv" style="color:var(--mist);max-width:580px;margin-top:22px">A platform built on proof shouldn't blur the line between today and the roadmap. So here it is, in two columns.</p>
+  <div class="cols rv">
+    <div>
+      <span class="tag">The Founding Trader offer</span>
+      <h3>What you get</h3>
+      <ul>
+        <li><span><b>A free custom Alpha</b>Your workflow, optimised, built from your recordings — including new modules it needs.</span></li>
+        <li><span><b>Your own learning space</b>Lessons, videos and live events wired to the exact step they teach. You own the content.</span></li>
+        <li><span><b>Practice mode for your members</b>Paper trading on your Alpha, with XP, streaks and progress.</span></li>
+        <li><span><b>Founding status</b>A permanent badge, founding terms locked in, first say on the module roadmap.</span></li>
+      </ul>
+    </div>
+    <div class="later">
+      <span class="tag gold">Designing with Cohort #1</span>
+      <h3>What we're building together</h3>
+      <ul>
+        <li><span><b>Dual-track grading</b>Every result shows profit and process grade side by side.</span></li>
+        <li><span><b>Signal School</b>Every signal card includes “when it lies”, with quick checks that unlock advanced signals.</span></li>
+        <li><span><b>Plan guardrails</b>A linter that checks your plan in plain language before you spend a backtest.</span></li>
+        <li><span><b>Public, timestamped predictions</b>A later upgrade: show your community your calls, live, and let the record speak.</span></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= SEATS ================= -->
+<section class="seats"><div class="wrap seats-grid">
+  <div>
+    <span class="eyebrow rv">Limited by design</span>
+    <h2 class="rv" style="margin-top:20px">Small is<br>the <em>product</em>.</h2>
+    <p class="rv">At 50,000 users, you build features for committees. We cap the cohort so we can build around the actual people inside it. <b>The Founding Traders shape what ships next</b>, and every Alpha carries its market and instrument type from day one, so forex and equities get added without starting over.</p>
+    <p class="rv mono" style="color:var(--slate)">Crypto first · spot, perps and futures</p>
+  </div>
+  <div id="dots" class="rv" aria-label="A grid of one hundred seats"></div>
+</div></section>
+
+<!-- ================= APPLY ================= -->
+<section class="apply" id="apply"><div class="wrap apply-grid">
+  <div>
+    <span class="eyebrow rv">Apply · Founding Traders</span>
+    <h2 class="rv" style="margin-top:20px">Show us<br>how you <em>trade</em>.</h2>
+    <p class="rv" style="color:var(--mist);margin-top:22px;max-width:460px">We're looking for traders with a distinctive, repeatable process: “I do X, then Y, then Z.” Engagement matters more than follower count.</p>
+    <ol class="path rv">
+      <li><span class="mono">Phase 0</span><b>Record your sessions</b></li>
+      <li><span class="mono">Phase 1</span><b>We build your Alpha</b></li>
+      <li><span class="mono">Phase 2</span><b>Teach from it</b></li>
+      <li><span class="mono">Phase 3</span><b>Your community grows on it</b></li>
+      <li class="later"><span class="mono">Later</span><b>Show your calls, live</b></li>
+    </ol>
+  </div>
+  <form id="form" class="rv" novalidate>
+    <label>Name<input name="name" required autocomplete="name"></label>
+    <label>Where you post (X, YouTube, Discord…)<input name="handle" required placeholder="@yourhandle"></label>
+    <label>Community size
+      <select name="size"><option>Just starting</option><option>1k – 15k</option><option>15k – 100k</option><option>100k+</option><option>Paid community (any size)</option></select>
+    </label>
+    <label>Describe your process in one line<textarea name="process" placeholder="I mark the weekly range, wait for a reclaim, check funding, then size off invalidation."></textarea></label>
+    <button class="btn" type="submit">Send application <span class="arr">→</span></button>
+    <div class="done-msg"><span class="eyebrow">Received</span><h3>We'll watch the tape.</h3><p>Thanks. We read every application personally and will reply to arrange your first call.</p></div>
+  </form>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="mega">
+    <div><span>Build</span><span class="dim">your</span><em>alpha.</em></div>
+    <div><span>Prove</span><span class="dim">your</span><em>alpha.</em><sup>Later phase</sup></div>
+    <div><span>Share</span><span class="dim">your</span><em>alpha.</em></div>
+  </div>
+  <div class="foot-row mono"><span>© 2026 AlphaKio</span><span>Educational platform · not financial advice</span><a href="#top">Back to top ↑</a></div>
+</div></footer>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+const lerp = (a,b,t) => a+(b-a)*t;
+const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+
+/* seeded rng so the chart is the same every visit */
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ================= HERO: noise → signal field ================= */
+const hero = document.querySelector('.hero');
+const cvs = document.getElementById('field');
+const ctx = cvs.getContext('2d');
+const hintBar = document.getElementById('hintBar');
+let W,H,DPR,parts=[],candles=[],mouse={x:-9999,y:-9999,on:false},lens={x:-9999,y:-9999},scrollP=0,t0=performance.now();
+const RAMP_N=10;
+const hex = h => [1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mixRamp = (a,b) => Array.from({length:RAMP_N},(_,i)=>{const t=i/(RAMP_N-1),A=hex(a),B=hex(b);return`rgb(${A.map((v,k)=>Math.round(lerp(v,B[k],t))).join(',')})`});
+const rampUp = mixRamp('#6b7b92','#2FD6A8'), rampDn = mixRamp('#6b7b92','#E86A76');
+
+function build(){
+  DPR = Math.min(devicePixelRatio||1,2);
+  W = cvs.clientWidth; H = cvs.clientHeight;
+  cvs.width = W*DPR; cvs.height = H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  const mobile = W<820;
+  const r = rng(7);
+  const n = mobile ? 24 : 44;
+  // random walk with gentle upward drift
+  candles=[]; let p=100;
+  for(let i=0;i<n;i++){
+    const g=(r()+r()+r()-1.5)*2.4, o=p, c=p+g+.45;
+    const hi=Math.max(o,c)+r()*2.2, lo=Math.min(o,c)-r()*2.2;
+    candles.push({o,c,hi,lo}); p=c;
+  }
+  const minP=Math.min(...candles.map(c=>c.lo)), maxP=Math.max(...candles.map(c=>c.hi));
+  const x0 = mobile ? W*.06 : W*.42, x1 = W*.95;
+  const y0 = mobile ? H*.56 : H*.16, y1 = mobile ? H*.9 : H*.84;
+  const step=(x1-x0)/n, bw=Math.max(3,step*.56);
+  const py = v => lerp(y1,y0,(v-minP)/(maxP-minP));
+  const total = mobile ? 2200 : 4600;
+  parts=[];
+  for(let i=0;i<total;i++){
+    const ci=i%n, c=candles[ci], cx=x0+step*(ci+.5);
+    let tx,ty;
+    const bTop=py(Math.max(c.o,c.c)), bBot=Math.max(py(Math.min(c.o,c.c)),bTop+3);
+    if(r()<.74){tx=cx+(r()-.5)*bw; ty=lerp(bTop,bBot,r());}
+    else {tx=cx+(r()-.5)*1.4; ty=lerp(py(c.hi),py(c.lo),r());}
+    parts.push({tx,ty,up:c.c>=c.o,hx:r()*W,hy:r()*H,
+      s1:.2+r()*.5,s2:.15+r()*.4,a1:20+r()*70,a2:10+r()*50,ph:r()*6.28,ph2:r()*6.28,
+      sz:r()<.12?2.4:1.6,o:0});
+  }
+}
+
+function frame(now){
+  const t=(now-t0)/1000;
+  ctx.clearRect(0,0,W,H);
+  // lens follows the pointer, or drifts on its own when idle / touch
+  if(!mouse.on){mouse.x=W*(.68+.2*Math.sin(t*.22)); mouse.y=H*(.5+.16*Math.sin(t*.31+1)); if(W<820) mouse.y=H*(.73+.08*Math.sin(t*.31));}
+  lens.x=lerp(lens.x<-999?mouse.x:lens.x,mouse.x,.14); lens.y=lerp(lens.y<-999?mouse.y:lens.y,mouse.y,.14);
+  const R = W<820 ? 90 : 150, R2=R*R;
+  const sp = ease(clamp(scrollP,0,1));
+  for(const p of parts){
+    const cx = p.hx + Math.sin(t*p.s1+p.ph+p.hy*.003)*p.a1 + Math.cos(t*p.s2+p.ph2)*p.a2*.6;
+    const cy = p.hy + Math.cos(t*p.s1*.8+p.ph+p.hx*.002)*p.a2 + Math.sin(t*p.s2+p.ph2)*p.a1*.4;
+    const dx=p.tx-lens.x, dy=p.ty-lens.y, d2=dx*dx+dy*dy;
+    const l = d2<R2 ? 1-Math.sqrt(d2)/R : 0;
+    const goal = Math.max(sp, clamp(l*2.6,0,1));
+    p.o += (goal-p.o)*.15;
+    const e = ease(p.o);
+    const x = lerp(cx,p.tx,e), y = lerp(cy,p.ty,e);
+    ctx.fillStyle = (p.up?rampUp:rampDn)[Math.round(e*(RAMP_N-1))];
+    ctx.globalAlpha = .42+e*.58;
+    const s=p.sz+e*.6;
+    ctx.fillRect(x-s/2,y-s/2,s,s);
+  }
+  ctx.globalAlpha=1;
+  // the lens
+  if(sp<.98){
+    const a=1-sp;
+    ctx.strokeStyle=`rgba(47,214,168,${.7*a})`; ctx.lineWidth=1;
+    ctx.setLineDash([3,5]); ctx.lineDashOffset=-t*12;
+    ctx.beginPath(); ctx.arc(lens.x,lens.y,R,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath();
+    for(const [ax,ay,bx,by] of [[-R-10,0,-R+8,0],[R-8,0,R+10,0],[0,-R-10,0,-R+8],[0,R-8,0,R+10]]){ctx.moveTo(lens.x+ax,lens.y+ay);ctx.lineTo(lens.x+bx,lens.y+by);}
+    ctx.stroke();
+    ctx.fillStyle=`rgba(47,214,168,${.9*a})`; ctx.font='500 10px "JetBrains Mono", monospace';
+    ctx.fillText('SIGNAL ISOLATED', lens.x-R*.5, lens.y-R-16);
+    ctx.fillStyle=`rgba(124,140,161,${.8*a})`;
+    ctx.fillText(`x:${Math.round(lens.x)} y:${Math.round(lens.y)}`, lens.x-R*.5, lens.y+R+24);
+  }
+  if(!reduce) requestAnimationFrame(frame);
+}
+cvs.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'){const b=cvs.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top;mouse.on=true;}});
+cvs.addEventListener('pointerleave',()=>mouse.on=false);
+// the canvas sits under hero copy, so also listen on the sticky wrapper
+document.querySelector('.hero-sticky').addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&e.target!==cvs){mouse.x=e.clientX;mouse.y=e.clientY;mouse.on=true;}});
+
+function onScroll(){
+  const rect=hero.getBoundingClientRect(), span=hero.offsetHeight-innerHeight;
+  scrollP = clamp(-rect.top/(span*.8),0,1);
+  hero.classList.toggle('resolved', scrollP>.55);
+  hintBar.style.transform=`scaleX(${scrollP})`;
+  document.getElementById('nav').classList.toggle('solid', scrollY>hero.offsetHeight-innerHeight);
+}
+addEventListener('scroll',onScroll,{passive:true});
+let rz; addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{build();if(reduce)frame(performance.now())},150)});
+build(); onScroll();
+if(reduce){scrollP=1;hero.classList.add('resolved');frame(performance.now());} else requestAnimationFrame(frame);
+
+/* ================= reveal on scroll ================= */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*80+'ms';io.observe(el)});
+
+/* ================= pipeline stage ================= */
+const wave=document.getElementById('wave');
+for(let i=0;i<34;i++){const b=document.createElement('i');b.style.height=(18+Math.abs(Math.sin(i*.7)*60)+(i*37%23))+'%';b.style.animationDelay=(-i*.13)+'s';wave.appendChild(b)}
+const crowd=document.getElementById('crowd');
+for(let i=0;i<12;i++){const m=document.createElement('div');m.className='mini';const a=i/12*Math.PI*2,rr=i%2?36:30;
+  m.style.left=50+Math.cos(a)*rr+'%';m.style.top=50+Math.sin(a)*rr+'%';m.style.transitionDelay=i*40+'ms';
+  m.innerHTML=`<b>MEMBER ${String(i+1).padStart(2,'0')}</b><i></i><i style="width:${40+i*37%50}%"></i><i style="width:${30+i*53%60}%"></i>`;crowd.appendChild(m)}
+const stage=document.getElementById('stage'),stepLbl=document.getElementById('stepLbl');
+const labels=['01 Record','02 Blueprint','03 Your Alpha','04 Practice'];
+const sio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));e.target.classList.add('on');
+  stage.dataset.step=e.target.dataset.i;stepLbl.textContent=labels[e.target.dataset.i];}}),{rootMargin:'-45% 0px -45% 0px'});
+document.querySelectorAll('.step').forEach(s=>sio.observe(s));
+
+/* ================= dual-track lab ================= */
+const iT=document.getElementById('iTrades'),iA=document.getElementById('iAssets'),segP=document.getElementById('iPeriods');
+let periods=1, rankBy='pnl';
+const letters=['D','D+','C-','C','C+','B-','B','B+','A-','A'];
+const gColor=s=>s<.35?'#E86A76':s<.65?'#E5C05B':'#2FD6A8';
+function curve(trades,seed){
+  const r=rng(seed), n=Math.max(trades,4); let v=0,pts=[];
+  // small samples: few big lucky jumps. large samples: many small noisy steps.
+  const vol=1/Math.sqrt(n), drift=.9/n;
+  for(let i=0;i<=n;i++){pts.push(v); v+=drift+(r()-.46)*vol*.9;}
+  const mn=Math.min(...pts),mx=Math.max(...pts);
+  return 'M'+pts.map((p,i)=>`${(i/n*300).toFixed(1)} ${(130-(p-mn)/(mx-mn||1)*120).toFixed(1)}`).join(' L');
+}
+function score(){
+  const trades=+iT.value, assets=+iA.value;
+  const s1=clamp(Math.log(trades/3)/Math.log(40),0,1), s2=(periods-1)/2, s3=(assets-1)/3;
+  return {trades,assets,s1,s2,s3,total:s1*.45+s2*.35+s3*.2};
+}
+function render(){
+  const s=score();
+  document.getElementById('oTrades').textContent=s.trades;
+  document.getElementById('oAssets').textContent=s.assets;
+  // the fewer trades, the prettier the headline number — that's the trap
+  const pnl=Math.round(1150+2970*Math.pow(1-s.s1,1.6)-180*s.s2);
+  const wr=Math.round(88-30*s.s1);
+  document.getElementById('pnl').textContent='+$'+pnl.toLocaleString('en-US');
+  document.getElementById('pnlSub').textContent=`$1,000 → $${(1000+pnl).toLocaleString('en-US')} · win rate ${wr}%`;
+  document.getElementById('curvePath').setAttribute('d',curve(s.trades,s.trades*7+periods));
+  const gi=clamp(Math.round(s.total*9),0,9), g=document.getElementById('grade');
+  g.textContent=letters[gi]; g.style.borderColor=g.style.color=gColor(s.total);
+  const rows=[['Sample size',s.s1,`${s.trades} trades`],['Periods tested',s.s2,`${periods} of 3`],['Assets tested',s.s3,`${s.assets} of 4`]];
+  document.getElementById('bars').innerHTML=rows.map(([k,v,l])=>`<div class="row">${k}<span>${l}</span><div class="track"><i style="width:${Math.max(8,v*100)}%;background:${gColor(v)}"></i></div></div>`).join('');
+  const v=document.getElementById('verdict');
+  const verdict = s.trades<15 ? ['Likely overfit. Run it on more trades.','#E86A76']
+    : periods<2 ? ['One regime only. Test a second period.','#E5C05B']
+    : s.assets<2 ? ['Works on one asset. Try another.','#E5C05B']
+    : s.total>.8 ? ['Holds up across regimes. This one earned it.','#2FD6A8']
+    : ['Getting sturdier. Keep widening the test.','#2FD6A8'];
+  v.textContent='→ '+verdict[0]; v.style.color=verdict[1];
+  renderBoard(pnl,gi,s);
+}
+function renderBoard(pnl,gi,s){
+  const rows=[
+    {h:'@quietedge',p:1210,g:8,f:'94 trades · 3 periods · 4 assets'},
+    {h:'@meanrev_mika',p:2480,g:6,f:'41 trades · 2 periods'},
+    {h:'@yolo420',p:4120,g:0,f:'likely overfit · 6 trades',warn:true},
+    {h:'you',p:pnl,g:gi,f:`${s.trades} trades · ${periods} period${periods>1?'s':''} · ${s.assets} asset${s.assets>1?'s':''}`,me:true,warn:s.trades<15}
+  ];
+  const sorted=[...rows].sort((a,b)=>rankBy==='pnl'?b.p-a.p:b.g-a.g||b.p-a.p);
+  const board=document.getElementById('board');
+  if(!board.children.length) board.innerHTML=rows.map((r,i)=>`<div class="brow" data-k="${r.h}"></div>`).join('');
+  const els=[...board.children];
+  els.forEach(el=>{
+    const r=rows.find(x=>x.h===el.dataset.k), idx=sorted.indexOf(r);
+    el.className='brow'+(r.me?' me':'')+(r.warn?' warn':'');
+    el.style.position='absolute';el.style.left=0;el.style.right=0;el.style.top=0;
+    el.innerHTML=`<span class="rk">${idx+1}</span><b style="font-weight:500">${r.h}</b><span class="pn">+$${r.p.toLocaleString('en-US')}</span><span class="g" style="color:${gColor(r.g/9)}">${letters[r.g]}</span><span class="fl">${r.f}</span>`;
+  });
+  // measure after filling, since rows wrap to two lines on phones
+  const rowH=Math.max(...els.map(el=>el.offsetHeight))+6;
+  board.style.height=(rowH*rows.length)+'px';
+  els.forEach(el=>{const idx=sorted.indexOf(rows.find(x=>x.h===el.dataset.k));el.style.transform=`translateY(${idx*rowH}px)`;});
+}
+iT.addEventListener('input',render); iA.addEventListener('input',render);
+segP.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;segP.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));periods=+b.dataset.v;render()});
+document.getElementById('rankBy').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;e.currentTarget.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));rankBy=b.dataset.v;render()});
+render(); addEventListener('resize',render);
+
+/* ================= signal cards ================= */
+document.querySelectorAll('.card').forEach(c=>{
+  const f=()=>c.classList.toggle('flip');
+  c.addEventListener('click',f); c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}});
+});
+
+/* ================= 100 seats, magnetic ================= */
+const dots=document.getElementById('dots');
+for(let i=0;i<100;i++) dots.appendChild(document.createElement('i'));
+const dd=[...dots.children];
+dots.addEventListener('pointermove',e=>{
+  dd.forEach(d=>{const b=d.getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2,dx=cx-e.clientX,dy=cy-e.clientY,dist=Math.hypot(dx,dy);
+    const f=clamp(1-dist/140,0,1);
+    d.style.transform=`translate(${dx/dist*f*14||0}px,${dy/dist*f*14||0}px) scale(${1+f*.3})`;
+    d.classList.toggle('lit',dist<50);});
+});
+dots.addEventListener('pointerleave',()=>dd.forEach(d=>{d.style.transform='';d.classList.remove('lit')}));
+
+/* ================= apply form ================= */
+// TODO: wire to the real intake endpoint (CRM / Founding Trader pipeline). Currently client-side only.
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault(); const f=e.currentTarget;
+  const nm=f.elements.name,hd=f.elements.handle;
+  if(!nm.value.trim()||!hd.value.trim()){(nm.value.trim()?hd:nm).focus();return}
+  f.classList.add('sent');
+});
+})();
+</script>
+</body>
+</html>
