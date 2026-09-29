@@ -178,6 +178,46 @@ nav.solid{background:rgba(11,20,32,.82);backdrop-filter:blur(12px);border-bottom
 .stage[data-step="3"] .mini{opacity:1}
 .stage[data-step="3"] .hub{opacity:1;transform:none}
 
+/* review pill on the blueprint step */
+.review{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);display:flex;gap:6px;align-items:center;white-space:nowrap;font-size:10px;color:var(--mist);background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:7px 12px;z-index:2}
+.review i{font-style:normal;color:var(--slate)}
+.review .ok{color:var(--signal)}
+form .privacy{font-size:12px;color:var(--slate);text-align:center;line-height:1.5}
+
+/* ---------- tabs → alpha ---------- */
+.tabs-sec{height:260vh;position:relative;border-top:1px solid var(--line)}
+.tabs-sticky{position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(24px,4vw,64px);align-items:center;padding:80px var(--gutter) 40px;max-width:1440px;margin:0 auto}
+.tabs-copy h2{font-size:clamp(44px,5.2vw,80px)}
+.tabs-copy p{color:var(--mist);margin-top:22px;max-width:440px}
+.tabs-copy p b{color:var(--paper);font-weight:500}
+.counter{display:flex;gap:28px;margin-top:30px}
+.counter div{display:grid;gap:4px}
+.counter strong{font:400 64px/1 var(--serif);color:var(--paper);font-variant-numeric:tabular-nums}
+.counter .after strong{color:var(--signal)}
+.counter small{font:500 11px/1.3 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.audit{list-style:none;margin-top:26px;display:grid;gap:8px;font-size:14px;color:var(--mist)}
+.audit li{display:flex;gap:10px;align-items:center;opacity:.35;transition:opacity .4s}
+.audit li.on{opacity:1}
+.audit li::before{content:"";width:14px;height:14px;border-radius:4px;border:1.5px solid var(--slate);flex:none;transition:all .3s}
+.audit li.on::before{background:var(--signal);border-color:var(--signal);box-shadow:0 0 10px var(--signal)}
+.desk{position:relative;width:100%;aspect-ratio:16/11;max-height:78vh}
+.frame{position:absolute;inset:0;border:1px solid var(--line);border-radius:16px;background:var(--ink-2);opacity:0;transition:opacity .5s}
+.frame header{display:flex;align-items:center;gap:10px;padding:0 14px;height:9%;border-bottom:1px solid var(--line);font:500 12px/1 var(--sans)}
+.frame header .tag{margin-left:auto;padding:3px 8px;font-size:9px}
+.desk.done .frame{opacity:1}
+.win{position:absolute;border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden;box-shadow:0 18px 40px -18px #000;will-change:left,top,width,height,transform;display:flex;flex-direction:column}
+.win .bar{display:flex;align-items:center;gap:5px;padding:0 8px;height:22px;flex:none;border-bottom:1px solid var(--line);font:500 10px/1 var(--sans);color:var(--mist);white-space:nowrap;overflow:hidden}
+.win .bar i{width:6px;height:6px;border-radius:50%;background:var(--line);flex:none}
+.win .t2{display:none;color:var(--paper)}
+.desk.done .win .t1,.desk.done .win .bar i{display:none}
+.desk.done .win .t2{display:inline}
+.desk.done .win{box-shadow:none;border-color:color-mix(in srgb,var(--signal) 25%,var(--line))}
+.win .body{flex:1;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;min-height:0}
+.win svg{width:100%;height:100%;min-height:0}
+.win .ln{height:4px;border-radius:2px;background:var(--line)}
+.win .ln.a{background:var(--signal);opacity:.8}
+.win .ln.w{background:var(--warn);opacity:.7}
+
 /* ---------- dual-track ---------- */
 .dual{padding:clamp(100px,16vh,180px) 0;border-top:1px solid var(--line);background:linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%)}
 .dual-head{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
@@ -342,6 +382,14 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   .hint{left:var(--gutter);right:auto}
   .quotes,.problem .answer,.dual-head,.cols,.seats-grid,.apply-grid{grid-template-columns:1fr}
   .pipe-grid{grid-template-columns:1fr}
+  .tabs-sec{height:240vh}
+  .tabs-sticky{grid-template-columns:1fr;align-content:start;gap:18px;padding-top:84px}
+  .tabs-copy h2{font-size:clamp(38px,11vw,56px)}
+  .tabs-copy p{margin-top:12px;font-size:15px}.audit{display:none}
+  .counter{margin-top:14px}.counter strong{font-size:40px}
+  .desk{aspect-ratio:1/1.05}
+  .review{font-size:8px;padding:5px 8px;gap:4px;bottom:1.5%}
+  .desk{aspect-ratio:1/1.08}
   .stage-col{position:sticky;top:60px;z-index:2;height:50vh;background:var(--ink)}
   .stage{position:relative;height:100%}
   .stage-box{width:min(100%,380px,46vh)}
@@ -407,7 +455,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     <div class="hero-copy">
       <span class="chip"><i></i>Founding Traders · Cohort #1 · Crypto first</span>
       <h1><span class="a">The market<br>is <em>noise</em>.</span><span class="b">Your method<br>is the <em>signal</em>.</span></h1>
-      <p class="lede">Show us how you trade. <b>We'll turn it into something your community can learn from</b> — your workflow, built into your own Alpha, practised step by step.</p>
+      <p class="lede">Show us how you trade. <b>We'll turn it into something your community can learn from</b> — your workflow, streamlined and rebuilt as your own Alpha, practised step by step.</p>
       <div class="cta-row">
         <a class="btn" href="#apply">Become a Founding Trader <span class="arr">→</span></a>
         <a class="btn ghost" href="#how">See the process</a>
@@ -448,6 +496,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
         <div class="layer l0 wave" id="wave"><div class="rec mono">Rec · your trading session</div></div>
 
         <div class="layer l1 nodes">
+          <div class="review mono"><span>AI draft</span><i>→</i><span>Human review</span><i>→</i><span class="ok">Your sign-off</span></div>
           <svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M26 30 C 50 30, 50 50, 74 50 M74 50 C 50 50, 50 72, 26 72 M26 72 C 40 86, 60 86, 74 80"/></svg>
           <div class="node entry" style="left:26%;top:30%"><span class="mono">Entry</span><strong>Reclaim of weekly VWAP</strong></div>
           <div class="node" style="left:74%;top:46%"><span class="mono">Confirm</span><strong>Funding flips neutral</strong></div>
@@ -474,11 +523,32 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
   </div>
   <div class="steps-col">
     <article class="step" data-i="0"><span class="n">01</span><h3>Record how you trade.</h3><p>Send us your real sessions — screen, voice, the messy bits. No script, no polish. The way you actually decide is the valuable part.</p><div class="mono">Phase 0 · Record</div></article>
-    <article class="step" data-i="1"><span class="n">02</span><h3>We write the scroll.</h3><p>Our AI pipeline turns the recording into an Alpha Blueprint — your technique, written down: what you look at, in what order, what makes you act, and what makes you walk away.</p><div class="mono">Phase 1 · Build</div></article>
+    <article class="step" data-i="1"><span class="n">02</span><h3>We write the scroll.</h3><p>AI agents turn your recording into a requirements draft: what you look at, in what order, what makes you act, and what makes you walk away. <b style="color:var(--paper);font-weight:500">Then our team reviews it with you and adjusts it</b> until it's your technique, written down.</p><div class="mono">Phase 1 · Build</div></article>
     <article class="step" data-i="2"><span class="n">03</span><h3>It becomes your Alpha.</h3><p>We build your workflow into your own Alpha — free, including any new modules it needs. You refine it until you'd trade from it yourself. Your lessons, videos and live events plug into the exact step they explain.</p><div class="mono">Phase 2 · Teach</div></article>
     <article class="step" data-i="3"><span class="n">04</span><h3>Your students train it.</h3><p>You're the sensei. Members run your Alpha in paper-trading practice mode, earning XP, keeping streaks and ranking up. They learn the <em>why</em>, not just the entry.</p><div class="mono">Phase 3 · Grow</div></article>
   </div>
 </div></section>
+
+<!-- ================= TABS → ALPHA ================= -->
+<section class="tabs-sec" id="upgrade">
+  <div class="tabs-sticky">
+    <div class="tabs-copy">
+      <span class="chip"><i></i>Workflow audit</span>
+      <h2 style="margin-top:20px">Eight tabs in.<br><em>One Alpha</em> out.</h2>
+      <p>We don't just copy your setup, we <b>improve it</b>. We look for where you lose time and focus, then build modules that remove it. You review every change, and nothing ships until you'd trade from it yourself.</p>
+      <div class="counter"><div><strong id="tabCount">8</strong><small>Tabs open</small></div><div class="after"><strong id="stepCount">0</strong><small>Steps in your Alpha</small></div></div>
+      <ul class="audit" id="audit">
+        <li>Map every tab, tool and manual check</li>
+        <li>Cut the copy-paste and tab switching</li>
+        <li>Build the missing modules</li>
+        <li>Put it all in your order, on one screen</li>
+      </ul>
+    </div>
+    <div class="desk" id="desk">
+      <div class="frame"><header><span>The Range Reclaim</span><span class="tag gold">Your Alpha</span></header></div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= DUAL TRACK ================= -->
 <section class="dual"><div class="wrap">
@@ -592,7 +662,9 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
       <span class="tag">The Founding Trader offer</span>
       <h3>What you get</h3>
       <ul>
-        <li><span><b>A free custom Alpha</b>Your workflow, optimised, built from your recordings — including new modules it needs.</span></li>
+        <li><span><b>A free custom Alpha</b>Your workflow, built from your recordings — including new modules it needs.</span></li>
+        <li><span><b>A workflow audit and upgrade</b>We look for where you lose time and streamline it. You sign off on every change.</span></li>
+        <li><span><b>Your recordings stay yours</b>Used for one purpose, building your Alpha, and not kept for anything else.</span></li>
         <li><span><b>Your own learning space</b>Lessons, videos and live events wired to the exact step they teach. You own the content.</span></li>
         <li><span><b>Practice mode for your members</b>Paper trading on your Alpha, with XP, streaks and progress.</span></li>
         <li><span><b>Founding status</b>A permanent badge, founding terms locked in, first say on the module roadmap.</span></li>
@@ -644,6 +716,7 @@ footer{border-top:1px solid var(--line);padding:clamp(80px,12vh,140px) 0 40px;ov
     </label>
     <label>Describe your process in one line<textarea name="process" placeholder="I mark the weekly range, wait for a reclaim, check funding, then size off invalidation."></textarea></label>
     <button class="btn" type="submit">Send application <span class="arr">→</span></button>
+    <p class="privacy">Anything you record for us is used only to build your Alpha, and isn't kept for any other purpose.</p>
     <div class="done-msg"><span class="eyebrow">Received</span><h3>We'll watch the tape.</h3><p>Thanks. We read every application personally and will reply to arrange your first call.</p></div>
   </form>
 </div></section>
@@ -795,6 +868,57 @@ const sio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));e.target.classList.add('on');
   stage.dataset.step=e.target.dataset.i;stepLbl.textContent=labels[e.target.dataset.i];}}),{rootMargin:'-45% 0px -45% 0px'});
 document.querySelectorAll('.step').forEach(s=>sio.observe(s));
+
+/* ================= tabs → alpha ================= */
+const desk=document.getElementById('desk'), tabsSec=document.querySelector('.tabs-sec');
+const W8=[ // [chaos title, module title, body kind]
+  ['TradingView — BTCUSDT 4H','Range levels','chart'],
+  ['funding_rates_v3.xlsx','Funding monitor','bars'],
+  ['Discord — #alerts (99+)','Alert feed','lines'],
+  ['notes.txt','Entry checklist','check'],
+  ['Exchange — Positions','Position sizer','lines'],
+  ['Etherscan — whale txs','On-chain flows','bars'],
+  ['X — search: $BTC','Sentiment','chart'],
+  ['Calculator','Risk / reward','check'],
+];
+const bodies={
+  chart:()=>`<svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 32 L12 28 L22 30 L34 20 L46 23 L58 14 L70 17 L82 8 L100 10" fill="none" style="stroke:var(--signal)" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`,
+  bars:()=>`<svg viewBox="0 0 100 40" preserveAspectRatio="none">${[8,14,10,22,16,28,19,34,24,30].map((h,i)=>`<rect x="${i*10+2}" y="${40-h}" width="6" height="${h}" style="fill:var(--${i%3?'line':'signal'})"/>`).join('')}</svg>`,
+  lines:()=>'<i class="ln a" style="width:70%"></i><i class="ln" style="width:90%"></i><i class="ln w" style="width:50%"></i><i class="ln" style="width:80%"></i>',
+  check:()=>'<i class="ln a" style="width:60%"></i><i class="ln a" style="width:75%"></i><i class="ln" style="width:55%"></i><i class="ln" style="width:65%"></i>',
+};
+const rr=rng(11);
+const wins=W8.map(([t1,t2,k],i)=>{
+  const el=document.createElement('div'); el.className='win';
+  el.innerHTML=`<div class="bar"><i></i><i></i><i></i><span class="t1">${t1}</span><span class="t2">${t2}</span></div><div class="body">${bodies[k]()}</div>`;
+  desk.appendChild(el);
+  // chaos: overlapping windows at odd angles; target: 4×2 dashboard grid under the frame header
+  const c={x:rr()*52,y:rr()*58,w:34+rr()*12,h:30+rr()*10,r:(rr()-.5)*16};
+  return {el,c,i};
+});
+const auditLis=[...document.querySelectorAll('#audit li')];
+// 4×2 dashboard on desktop, 2×4 on phones
+function layoutTargets(){
+  const cols=innerWidth<820?2:4, rows=8/cols, g=1.6;
+  wins.forEach(w=>{const col=w.i%cols,row=w.i/cols|0;w.t={x:g+col*(100-g)/cols,y:11+row*(88-g)/rows,w:(100-g)/cols-g,h:(88-g)/rows-g}});
+}
+layoutTargets(); addEventListener('resize',()=>{layoutTargets();tabsScroll()});
+function tabsScroll(){
+  const r=tabsSec.getBoundingClientRect(), span=tabsSec.offsetHeight-innerHeight;
+  const p=clamp((-r.top)/(span*.85),0,1);
+  wins.forEach((w,i)=>{
+    // stagger each window a little so they arrive one after another
+    const k=ease(clamp((p-i*.035)/(.72),0,1));
+    const L=(a,b)=>a+(b-a)*k;
+    Object.assign(w.el.style,{left:L(w.c.x,w.t.x)+'%',top:L(w.c.y,w.t.y)+'%',width:L(w.c.w,w.t.w)+'%',height:L(w.c.h,w.t.h)+'%',transform:`rotate(${L(w.c.r,0)}deg)`,zIndex:k>.5?1:10-i});
+  });
+  desk.classList.toggle('done',p>.8);
+  document.getElementById('tabCount').textContent=Math.max(1,Math.round(8-7*clamp(p/.8,0,1)));
+  document.getElementById('stepCount').textContent=Math.round(8*clamp((p-.1)/.7,0,1));
+  auditLis.forEach((li,i)=>li.classList.toggle('on',p>i*.2+.05));
+}
+addEventListener('scroll',tabsScroll,{passive:true}); tabsScroll();
+if(reduce){wins.forEach(w=>Object.assign(w.el.style,{left:w.t.x+'%',top:w.t.y+'%',width:w.t.w+'%',height:w.t.h+'%'}));desk.classList.add('done')}
 
 /* ================= dual-track lab ================= */
 const iT=document.getElementById('iTrades'),iA=document.getElementById('iAssets'),segP=document.getElementById('iPeriods');
