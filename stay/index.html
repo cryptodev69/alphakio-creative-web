@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stay — AlphaKio for Paid Communities</title>
+<meta name="description" content="You don't have a growth problem, you have a leak. Give members your actual workflow to practise, so they stay because they keep getting better.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1420; --ink-2:#0E1724; --panel:#121D2B; --line:#1F2E40;
+  --slate:#55647A; --mist:#7C8CA1; --paper:#E4EDF5;
+  --signal:#2FD6A8; --gold:#E5C05B; --loss:#E86A76; --on-accent:#0B1420;
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --gutter:clamp(16px,4vw,56px);
+}
+:root[data-theme="ocean"]{--ink:#0E1016;--ink-2:#12151C;--panel:#161A22;--line:#252B36;--slate:#5A6475;--mist:#8A93A6;--paper:#E8ECF4;--signal:#4C6FFF;--gold:#3DDC97;--on-accent:#FFFFFF}
+:root[data-theme="violet"]{--ink:#0F0C16;--ink-2:#14101D;--panel:#1A1525;--line:#2C2440;--slate:#635A7A;--mist:#9A90B2;--paper:#EEEAF6;--signal:#9B6BFF;--gold:#F4A6C8;--on-accent:#FFFFFF}
+:root[data-theme="ember"]{--ink:#110E0C;--ink-2:#16120F;--panel:#1D1814;--line:#342A22;--slate:#6E6258;--mist:#A8998C;--paper:#F4EDE6;--signal:#FF7A2F;--gold:#F5C04A;--loss:#E0457B;--on-accent:#140E0A}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);font:400 17px/1.6 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background-color .5s}
+a{color:inherit}
+::selection{background:var(--signal);color:var(--on-accent)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.01em;line-height:.95}
+h2{font-size:clamp(44px,6.2vw,96px)}
+h1 em,h2 em{font-style:italic;color:var(--signal)}
+h1 em.red,h2 em.red{color:var(--loss)}
+.wrap{padding:0 var(--gutter);max-width:1440px;margin:0 auto}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid color-mix(in srgb,var(--paper) 55%,transparent);border-radius:99px;padding:7px 14px;font:500 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper)}
+.chip i{width:6px;height:6px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+.chip.red i{background:var(--loss);box-shadow:0 0 10px var(--loss)}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:99px;padding:15px 24px;font:500 15px/1 var(--sans);text-decoration:none;cursor:pointer;border:1px solid var(--signal);background:var(--signal);color:var(--on-accent);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px var(--signal)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--mist);box-shadow:none}
+.btn.sm{padding:10px 16px;font-size:14px}
+.btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(4px)}
+.rv{opacity:0;transform:translateY(40px);transition:opacity 1s,transform 1s cubic-bezier(.2,.9,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:space-between;align-items:center;padding:16px var(--gutter);transition:background .4s}
+nav.solid{background:color-mix(in srgb,var(--ink) 85%,transparent);backdrop-filter:blur(10px)}
+.logo{color:var(--paper);text-decoration:none}
+.logo .wordmark{height:38px;width:auto;display:block;overflow:visible}
+.logo .wordmark g{transition:stroke .3s}.logo:hover .wordmark g{stroke:var(--signal)}
+.nav-r{display:flex;gap:10px;align-items:center}
+.theme-cycle{display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);color:var(--paper);border-radius:99px;padding:9px 14px;font:500 13px/1 var(--sans);cursor:pointer}
+.theme-cycle i{width:9px;height:9px;border-radius:50%;background:var(--signal)}
+.theme-cycle i+i{background:var(--gold);margin-left:-4px}
+
+/* =================== THE LEAK (pinned story) =================== */
+.story{position:relative;height:620vh}
+.st-sticky{overflow:hidden;position:sticky;top:0;height:100vh;height:100svh;display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,70px);align-items:center;padding:84px var(--gutter) 28px;max-width:1500px;margin:0 auto}
+.st-copy{position:relative;height:min(70vh,560px)}
+.sc{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity .6s,transform .6s,filter .6s;pointer-events:none}
+.sc.on{opacity:1;transform:none;filter:none;pointer-events:auto}
+.sc h1{font-size:clamp(52px,6.6vw,112px);margin:22px 0 22px}
+.sc h2{font-size:clamp(40px,4.8vw,78px);margin:18px 0 18px}
+.sc p{color:var(--mist);max-width:470px;font-size:clamp(16px,1.3vw,19px)}
+.sc p b{color:var(--paper);font-weight:500}
+.sc .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.leak-q{font:italic 400 clamp(22px,2.2vw,32px)/1.2 var(--serif);color:var(--loss);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--loss) 60%,transparent);margin-top:6px}
+.fixname{display:inline-flex;align-items:center;gap:10px;margin-top:6px;font:500 13px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+.fixname::before{content:"✓";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--signal);color:var(--on-accent);font-size:12px}
+.dots{position:absolute;left:0;bottom:-6px;display:flex;gap:6px}
+.dots i{width:22px;height:3px;border-radius:2px;background:var(--line);transition:background .4s}
+.dots i.on{background:var(--signal)}
+.dots i.red{background:var(--loss)}
+
+.vessel{position:relative;height:min(80vh,720px);width:100%}
+#sim,#glass{position:absolute;inset:0;width:100%;height:100%}
+#sim{filter:url(#goo) drop-shadow(0 0 18px color-mix(in srgb,var(--signal) 45%,transparent))}
+.hole{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:500 11px/1 var(--mono);letter-spacing:.06em;padding:7px 10px;border-radius:99px;border:1px solid color-mix(in srgb,var(--loss) 60%,transparent);background:color-mix(in srgb,var(--loss) 14%,var(--ink));color:var(--loss);transition:all .5s;z-index:2}
+.hole.sealed{border-color:color-mix(in srgb,var(--signal) 60%,transparent);background:color-mix(in srgb,var(--signal) 14%,var(--ink));color:var(--signal)}
+.hole .f{display:none}.hole.sealed .r{display:none}.hole.sealed .f{display:inline}
+.hole.l{transform:translate(calc(-100% - 14px),-50%)}.hole.rt{transform:translate(14px,-50%)}.hole.b{transform:translate(-50%,16px)}
+.counters{position:absolute;left:0;right:0;top:0;display:flex;justify-content:center;gap:clamp(14px,3vw,40px);z-index:2}
+.counters div{text-align:center}
+.counters strong{display:block;font:400 clamp(26px,2.6vw,40px)/1 var(--serif);font-variant-numeric:tabular-nums}
+.counters small{font:500 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.counters .in strong{color:var(--paper)}.counters .out strong{color:var(--loss)}.counters .stay strong{color:var(--signal)}
+
+/* =================== CALCULATOR =================== */
+.calc{padding:clamp(100px,15vh,160px) 0;border-top:1px solid var(--line)}
+.calc-head{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:end}
+.calc-head p{color:var(--mist)}
+.calc-head p b{color:var(--paper);font-weight:500}
+.calc-grid{display:grid;grid-template-columns:340px 1fr;gap:16px;margin-top:56px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:26px}
+.ctrl{margin-bottom:26px}
+.ctrl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;gap:10px}
+.ctrl label output{font-family:var(--mono);color:var(--signal);white-space:nowrap}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;background:var(--line);border-radius:4px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--paper);border:4px solid var(--signal);cursor:grab}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--paper);border:4px solid var(--signal);cursor:grab}
+.ctrl.red label output{color:var(--loss)}
+.ctrl.red input::-webkit-slider-thumb{border-color:var(--loss)}
+.fine{font-size:12px;color:var(--slate);line-height:1.5}
+.results{display:grid;grid-template-rows:auto 1fr;gap:16px}
+.bigs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.big{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.big small{font:500 10px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--slate);display:block}
+.big strong{display:block;font:400 clamp(34px,3.4vw,54px)/1.05 var(--serif);margin-top:10px;font-variant-numeric:tabular-nums}
+.big.red strong{color:var(--loss)}.big.green strong{color:var(--signal)}
+.big span{font-size:13px;color:var(--mist)}
+.cohorts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cohort{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.cohort header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.cohort header b{font-weight:500}
+.cohort header .mono{color:var(--slate)}
+.grid100{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.grid100 i{aspect-ratio:1;border-radius:50%;background:var(--signal);box-shadow:0 0 8px color-mix(in srgb,var(--signal) 60%,transparent);transition:background .35s,box-shadow .35s,transform .35s}
+.grid100 i.gone{background:var(--line);box-shadow:none;transform:scale(.6)}
+.cohort.bad .grid100 i:not(.gone){background:var(--mist);box-shadow:none}
+.cohort .left{font:400 34px/1 var(--serif)}
+.cohort .left small{font:500 12px var(--sans);color:var(--mist)}
+.month{display:flex;align-items:center;gap:12px;font:500 12px/1 var(--mono);color:var(--mist)}
+.month .bar{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.month .bar i{display:block;height:100%;background:var(--signal);transform-origin:left}
+
+/* =================== LINE vs LOOP =================== */
+.loop{padding:clamp(100px,15vh,160px) 0;border-top:1px solid var(--line)}
+.ll{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+.ll > div{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px;min-height:420px;display:flex;flex-direction:column}
+.ll h3{font-size:clamp(30px,3vw,44px)}
+.ll p{color:var(--mist);font-size:15px;margin-top:10px;max-width:420px}
+.ll .viz{flex:1;position:relative;margin-top:20px;min-height:220px}
+.line-viz{display:flex;align-items:center}
+.lesson-line{position:relative;width:100%;height:2px;background:var(--line)}
+.lesson-line .n{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--ink);border:2px solid var(--slate)}
+.lesson-line .n span{position:absolute;top:18px;left:50%;transform:translateX(-50%);font:500 10px var(--mono);color:var(--slate)}
+.walker{z-index:2;box-shadow:0 0 10px var(--mist);position:absolute;top:50%;left:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--mist);animation:walk 5s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes walk{0%{left:0;opacity:0;transform:none}8%{opacity:1}42%{left:24%;transform:none;opacity:1}62%{left:26%;transform:translateY(120px);opacity:0}100%{left:26%;transform:translateY(120px);opacity:0}}
+.drop-lbl{position:absolute;left:24%;top:calc(50% + 60px);transform:translateX(-50%);font:500 11px/1 var(--mono);color:var(--loss);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.loop-viz{display:grid;place-items:center}
+.ring{position:relative;width:min(100%,300px);aspect-ratio:1;border-radius:50%;border:2px solid color-mix(in srgb,var(--signal) 45%,var(--line));box-shadow:0 0 60px -20px var(--signal),inset 0 0 40px -20px var(--signal)}
+.ring .spin{position:absolute;inset:0;animation:spin 7s linear infinite}
+.ring .spin:nth-child(2){animation-duration:7s;animation-delay:-1.75s}.ring .spin:nth-child(3){animation-delay:-3.5s}.ring .spin:nth-child(4){animation-delay:-5.25s}
+.ring .spin i{position:absolute;left:50%;top:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--signal);box-shadow:0 0 14px var(--signal)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ring .st{position:absolute;transform:translate(-50%,-50%);background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:500 12px/1.2 var(--sans);text-align:center;white-space:nowrap}
+.ring .core{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font:italic 400 22px/1.1 var(--serif);color:var(--signal)}
+
+/* =================== OFFER =================== */
+.offer{padding:clamp(100px,15vh,160px) 0;border-top:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--signal) 50%,var(--line))}
+.card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--signal) 14%,transparent);color:var(--signal)}
+.card .ic svg{width:22px;height:22px}
+.card h3{font-size:28px}
+.card p{color:var(--mist);font-size:14px}
+.card .leak{margin-top:auto;font:500 11px/1.3 var(--mono);color:var(--slate);letter-spacing:.04em}
+.card .leak b{color:var(--loss);font-weight:500}
+.band{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.band > div{border-radius:20px;padding:26px}
+.band .free{background:linear-gradient(120deg,color-mix(in srgb,var(--signal) 18%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--signal) 40%,var(--line))}
+.band .free h3{font-size:32px;margin-bottom:10px}
+.band .free ul{list-style:none;display:grid;gap:8px;color:var(--mist);font-size:15px}
+.band .free li::before{content:"→ ";color:var(--signal);font-family:var(--mono)}
+.band .honest{border:1px dashed var(--line);color:var(--mist);font-size:15px}
+.band .honest h3{font-size:28px;color:var(--paper);margin-bottom:10px}
+.band .honest b{color:var(--paper);font-weight:500}
+
+/* =================== APPLY =================== */
+.apply{padding:clamp(100px,15vh,160px) 0;border-top:1px solid var(--line);position:relative;overflow:hidden}
+.apply::before{content:"";position:absolute;width:1000px;height:1000px;left:25%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,color-mix(in srgb,var(--signal) 13%,transparent),transparent 60%);pointer-events:none}
+.apply-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,100px);position:relative}
+.apply .lede{color:var(--mist);max-width:480px;margin-top:22px}
+.apply .lede b{color:var(--paper);font-weight:500}
+.alt-links{margin-top:30px;display:grid;gap:10px;font-size:15px;color:var(--mist)}
+.alt-links a{color:var(--signal)}
+form{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:clamp(22px,3vw,36px);display:grid;gap:16px}
+form label{display:grid;gap:8px;font-size:14px;color:var(--mist)}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+form input,form select{background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:13px 14px;color:var(--paper);font:15px var(--sans);outline:none;width:100%;transition:border-color .2s}
+form input:focus,form select:focus{border-color:var(--signal)}
+form .btn{justify-content:center;margin-top:4px}
+form .fine{text-align:center}
+.done-msg{display:none;text-align:center;padding:30px 8px}
+.done-msg .ok{width:70px;height:70px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;background:var(--signal);color:var(--on-accent);font-size:30px;box-shadow:0 0 40px var(--signal)}
+.done-msg h3{font-size:44px;margin-bottom:12px}
+.done-msg p{color:var(--mist)}
+form.sent > :not(.done-msg){display:none}
+form.sent .done-msg{display:block}
+footer{border-top:1px solid var(--line);padding:40px 0;color:var(--slate)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+footer p{font-size:12px}
+.foot-links{display:flex;gap:10px;flex-wrap:wrap}
+
+@media (max-width:1100px){.cards{grid-template-columns:1fr 1fr}.calc-grid{grid-template-columns:1fr}}
+@media (max-width:900px){
+  .story{height:640vh}
+  .st-sticky{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:stretch;padding:70px 14px 14px;gap:0}
+  .vessel{height:44vh;height:44svh;order:-1}
+  .st-copy{height:auto;min-height:250px}
+  .sc{justify-content:flex-start}
+  .sc h1{font-size:clamp(34px,10vw,52px);margin:12px 0 10px}
+  .sc h2{font-size:clamp(30px,8.6vw,44px);margin:10px 0 8px}
+  .sc p{font-size:14px;line-height:1.5}
+  .sc .cta-row{margin-top:14px}.sc .cta-row .ghost{display:none}
+  .leak-q{font-size:18px}
+  .hole{font-size:8px;padding:4px 6px;letter-spacing:0}
+  .hole.l{transform:translate(calc(-100% - 6px),-50%)}.hole.rt{transform:translate(6px,-50%)}
+  .sc .fixname{font-size:11px}.sc .fixname::before{width:18px;height:18px}
+  .counters small{font-size:8px}
+  .dots{bottom:auto;top:-10px}
+  .calc-head,.cohorts,.ll,.band,.apply-grid{grid-template-columns:1fr}
+  .bigs{grid-template-columns:1fr}
+  .cards{grid-template-columns:1fr}
+  form .row{grid-template-columns:1fr}
+  .theme-cycle .lbl{display:none}
+  .nav-r .ghost{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="logo" href="../" aria-label="AlphaKio home"><svg class="wordmark" viewBox="22 28 186 64" aria-hidden="true">
+      <defs>
+        <pattern id="stripes" width="4" height="3.4" patternUnits="userSpaceOnUse"><rect width="4" height="2.2" fill="#fff"/></pattern>
+        <mask id="alphaMask"><rect x="0" y="0" width="240" height="120" fill="url(#stripes)"/></mask>
+      </defs>
+      <g mask="url(#alphaMask)" transform="skewX(-10) translate(12 0)" fill="none" stroke="currentColor" stroke-width="10.5" stroke-linejoin="miter" stroke-linecap="butt">
+        <path d="M70 46 H48 L31 70 L43 84 H74"/>
+        <path d="M57 86 L97 38"/><path d="M62 44 L99 86"/>
+      </g>
+      <text x="101" y="48" font-family="Inter,sans-serif" font-weight="300" font-size="17" fill="currentColor" letter-spacing=".3">alpha</text>
+      <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
+    </svg></a>
+  <div class="nav-r">
+    <button class="theme-cycle" id="themeBtn" type="button" title="Change theme"><i></i><i></i><span class="lbl" id="themeName">Deep Slate</span></button>
+    <a class="btn ghost sm" href="#calc">Your numbers</a>
+    <a class="btn sm" href="#apply">Plug the leak <span class="arr">→</span></a>
+  </div>
+</nav>
+
+<!-- =================== THE LEAK =================== -->
+<section class="story" id="story">
+  <div class="st-sticky">
+    <div class="st-copy" id="stCopy">
+      <div class="sc on" data-s="0">
+        <span class="chip red"><i></i>For paid-community owners</span>
+        <h1>You don't have a <em>growth</em> problem. You have a <em class="red">leak</em>.</h1>
+        <p>Members join excited, copy a few entries, stop improving and cancel. <b>AlphaKio gives them your actual workflow to practise</b>, so they keep showing up because they keep getting better.</p>
+        <div class="cta-row"><a class="btn" href="#apply">Plug the leak <span class="arr">→</span></a><a class="btn ghost" href="#calc">Run your numbers</a></div>
+      </div>
+      <div class="sc" data-s="1">
+        <span class="mono" style="color:var(--slate)">Leak 01</span>
+        <p class="leak-q">“Copied the entry. Lost. Blamed you.”</p>
+        <h2>Practise it <em>before</em> paying for it.</h2>
+        <span class="fixname">Practice mode</span>
+        <p style="margin-top:16px">Members run your Alpha step by step in paper trading before they risk a dollar. <b>They learn the why, not just the entry</b>, and a loss becomes a lesson instead of a cancellation.</p>
+      </div>
+      <div class="sc" data-s="2">
+        <span class="mono" style="color:var(--slate)">Leak 02</span>
+        <p class="leak-q">“Dropped off after lesson 3.”</p>
+        <h2>Lessons that point at <em>the step</em>.</h2>
+        <span class="fixname">Lessons wired to your Alpha</span>
+        <p style="margin-top:16px">Every lesson, video and live event links to the exact step it teaches. <b>Learning is hands-on, not a playlist</b> members fall behind on.</p>
+      </div>
+      <div class="sc" data-s="3">
+        <span class="mono" style="color:var(--slate)">Leak 03</span>
+        <p class="leak-q">“Nothing to do between your live calls.”</p>
+        <h2>A reason to show up <em>every day</em>.</h2>
+        <span class="fixname">Daily streaks &amp; XP</span>
+        <p style="margin-top:16px">Practice earns XP and keeps a streak alive, so members have something to do on the days you're not live. <b>Habits keep subscriptions.</b></p>
+      </div>
+      <div class="sc" data-s="4">
+        <span class="mono" style="color:var(--slate)">Leak 04</span>
+        <p class="leak-q">“I can't tell if I'm improving.”</p>
+        <h2>Progress they can <em>see</em>.</h2>
+        <span class="fixname">Ranks, Rookie to Expert</span>
+        <p style="margin-top:16px">Ranks are earned by training your method, not by posting the most. <b>People don't cancel a climb they're halfway up.</b></p>
+      </div>
+      <div class="sc" data-s="5">
+        <span class="chip"><i></i>Sealed</span>
+        <h1>They stay because they're <em>getting better</em>.</h1>
+        <p>Your method, built into an Alpha your members practise with: <b>lessons, practice, streaks and ranks in one place</b>, next to your community.</p>
+        <div class="cta-row"><a class="btn" href="#apply">Plug the leak <span class="arr">→</span></a><a class="btn ghost" href="#calc">Run your numbers</a></div>
+      </div>
+      <div class="dots" id="stDots"><i class="red"></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="vessel" id="vessel">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="goo"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></svg>
+      <canvas id="sim" aria-hidden="true"></canvas><canvas id="glass" aria-hidden="true"></canvas>
+      <div class="counters"><div class="in"><strong id="cIn">0</strong><small>Joined</small></div><div class="out"><strong id="cOut">0</strong><small>Cancelled</small></div><div class="stay"><strong id="cStay">0</strong><small>Staying</small></div></div>
+      <div class="hole l" data-h="0"><span class="r">Copied, lost, left</span><span class="f">✓ Practice mode</span></div>
+      <div class="hole rt" data-h="1"><span class="r">Quit after lesson 3</span><span class="f">✓ Lessons on the step</span></div>
+      <div class="hole b" data-h="2"><span class="r">Nothing to do</span><span class="f">✓ Streaks &amp; XP</span></div>
+      <div class="hole rt" data-h="3"><span class="r">No visible progress</span><span class="f">✓ Ranks</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CALCULATOR =================== -->
+<section class="calc" id="calc"><div class="wrap">
+  <div class="calc-head">
+    <div><span class="chip rv"><i></i>Your leak, in dollars</span>
+    <h2 class="rv" style="margin-top:20px">Of 100 members who join<br>in January, how many<br><em>pay in December?</em></h2></div>
+    <p class="rv">Plug in your own numbers. <b>This is your math, not our promise</b>: it shows what churn costs you today and what a few points less would be worth.</p>
+  </div>
+  <div class="calc-grid">
+    <div class="panel rv">
+      <div class="ctrl"><label>Paying members <output id="oM">400</output></label><input id="iM" type="range" min="20" max="5000" step="10" value="400"></div>
+      <div class="ctrl"><label>Monthly price <output id="oP">$49</output></label><input id="iP" type="range" min="5" max="300" step="1" value="49"></div>
+      <div class="ctrl red"><label>Monthly churn today <output id="oC">12%</output></label><input id="iC" type="range" min="1" max="30" step="0.5" value="12"></div>
+      <div class="ctrl"><label>If churn dropped by <output id="oD">3 pts</output></label><input id="iD" type="range" min="0.5" max="10" step="0.5" value="3"></div>
+      <p class="fine">Assumes you replace cancellations with new signups to hold member count steady. Monthly churn = the share of paying members who cancel each month.</p>
+    </div>
+    <div class="results rv">
+      <div class="bigs">
+        <div class="big red"><small>Cancel each month</small><strong id="rLost">48</strong><span id="rLostS">members you have to re-sell</span></div>
+        <div class="big red"><small>Revenue re-earned per year</small><strong id="rYear">$28,224</strong><span>just to stand still</span></div>
+        <div class="big green"><small>Kept per year at lower churn</small><strong id="rKeep">$7,056</strong><span id="rKeepS">and members stay 12 → 16 mo</span></div>
+      </div>
+      <div class="cohorts">
+        <div class="cohort bad"><header><b id="hBad">At 12% churn</b><span class="mono" id="mBad">Month 0</span></header><div class="grid100" id="gBad"></div><div class="left"><span id="lBad">100</span> <small>of 100 still paying</small></div></div>
+        <div class="cohort"><header><b id="hGood">At 9% churn</b><span class="mono" id="mGood">Month 0</span></header><div class="grid100" id="gGood"></div><div class="left"><span id="lGood">100</span> <small>of 100 still paying</small></div></div>
+      </div>
+      <div class="month"><span id="mLbl">Jan</span><span class="bar"><i id="mBar"></i></span><span>Dec</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- =================== LINE vs LOOP =================== -->
+<section class="loop"><div class="wrap">
+  <span class="chip rv"><i></i>Why it works</span>
+  <h2 class="rv" style="margin-top:20px">A course is a line.<br><em>Practice is a loop.</em></h2>
+  <div class="ll">
+    <div class="rv"><h3>The course</h3><p>Ten lessons in a row. Miss one, fall behind, feel bad, cancel. Every line has an end, and most people leave long before it.</p>
+      <div class="viz line-viz"><div class="lesson-line" id="lessons"><span class="walker"></span><span class="walker" style="animation-delay:-1.6s"></span><span class="walker" style="animation-delay:-3.3s"></span></div><span class="drop-lbl">↓ gone after lesson 3</span></div></div>
+    <div class="rv"><h3>The loop</h3><p>Learn a step, practise it, earn XP, come back tomorrow for the next one. There's no last lesson to drop off after, just the next rep.</p>
+      <div class="viz loop-viz"><div class="ring"><div class="spin"><i></i></div><div class="spin"><i></i></div><div class="spin"><i></i></div><div class="spin"><i></i></div>
+        <span class="st" style="left:50%;top:0">Learn the step</span><span class="st" style="left:100%;top:50%">Practise it</span><span class="st" style="left:50%;top:100%">Earn XP &amp; rank</span><span class="st" style="left:0;top:50%">Come back</span>
+        <div class="core">your<br>method</div></div></div></div>
+  </div>
+</div></section>
+
+<!-- =================== OFFER =================== -->
+<section class="offer"><div class="wrap">
+  <span class="chip rv"><i></i>What your members get</span>
+  <h2 class="rv" style="margin-top:20px">Your method, built into<br>something they <em>use daily</em>.</h2>
+  <div class="cards">
+    <div class="card rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18 9 12l4 4 7-9"/></svg></span><h3>Your Alpha</h3><p>Your actual workflow, step by step, in your order. We build it free from your recordings, then streamline it with you.</p><span class="leak">Plugs: <b>“I don't get how you trade”</b></span></div>
+    <div class="card rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></span><h3>Practice mode</h3><p>Paper trading on your Alpha, so members build skill before they risk money.</p><span class="leak">Plugs: <b>copy, lose, blame, cancel</b></span></div>
+    <div class="card rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v12H4zM9 21h6"/></svg></span><h3>Your learning space</h3><p>Lessons, videos and live events wired to each step. You own the content.</p><span class="leak">Plugs: <b>drop-off after lesson 3</b></span></div>
+    <div class="card rv"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c2 3 6 5 6 10a6 6 0 0 1-12 0c0-3 2-4 3-7 1 2 2 3 3 3 .5-2 0-4 0-6z"/></svg></span><h3>Streaks, XP &amp; ranks</h3><p>A daily reason to come back and progress they can see, earned by practice.</p><span class="leak">Plugs: <b>“nothing to do” and “am I improving?”</b></span></div>
+  </div>
+  <div class="band">
+    <div class="free rv"><h3>Free for Founding Traders.</h3><ul><li>We build your Alpha from your recordings, free</li><li>AI agents draft it, our team reviews it with you</li><li>Founding terms locked in and first say on the roadmap</li><li>Recordings used only to build your Alpha, never kept for anything else</li></ul></div>
+    <div class="honest rv"><h3>No made-up retention stats.</h3><p>We're building this with our first cohort of community owners, so we won't quote you a churn number we haven't measured. <b>What we'll do is show you your own numbers</b>, before and after, as your members start practising.</p></div>
+  </div>
+</div></section>
+
+<!-- =================== APPLY =================== -->
+<section class="apply" id="apply"><div class="wrap apply-grid">
+  <div>
+    <span class="chip rv"><i></i>Apply · Founding Traders</span>
+    <h2 class="rv" style="margin-top:20px">Plug the <em>leak</em>.</h2>
+    <p class="lede rv">For traders running a paid community on Discord, Telegram, Skool or anywhere else. <b>Tell us about your members</b> and we'll show you how your method would work as a practice loop.</p>
+    <div class="alt-links rv">
+      <span>Rather talk first? <a href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener">Find us on Discord →</a></span>
+      <span>See what your members would get: <a href="https://www.alphak.io/tradeoverlord">try AlphaKio free for 7 days →</a></span>
+    </div>
+  </div>
+  <form id="form" class="rv" novalidate>
+    <div class="row"><label>Name<input name="name" required autocomplete="name"></label><label>Your community<input name="community" required placeholder="Link or name"></label></div>
+    <div class="row">
+      <label>Where it lives<select name="platform"><option>Discord</option><option>Telegram</option><option>Skool</option><option>Whop</option><option>Patreon</option><option>Other</option></select></label>
+      <label>Paying members<input name="members" inputmode="numeric" placeholder="400"></label>
+    </div>
+    <div class="row">
+      <label>Monthly price<input name="price" inputmode="numeric" placeholder="$49"></label>
+      <label>Monthly churn (rough)<input name="churn" inputmode="decimal" placeholder="12%"></label>
+    </div>
+    <label>Biggest reason members leave<select name="reason"><option>They copy entries, lose and blame me</option><option>They drop off partway through the course</option><option>Nothing to do between live calls</option><option>They can't see themselves improving</option><option>Price / other</option></select></label>
+    <button class="btn" type="submit">Send it <span class="arr">→</span></button>
+    <p class="fine">Your numbers stay between us and are only used to prepare your first call.</p>
+    <div class="done-msg"><div class="ok">✓</div><h3>Leak reported.</h3><p>We read every application personally and will reply to set up your first call, with your numbers on the table.</p></div>
+  </form>
+</div></section>
+
+<footer><div class="wrap">
+  <a class="logo" href="../" aria-label="AlphaKio home"><svg class="wordmark" viewBox="22 28 186 64" aria-hidden="true">
+      
+      <g mask="url(#alphaMask)" transform="skewX(-10) translate(12 0)" fill="none" stroke="currentColor" stroke-width="10.5" stroke-linejoin="miter" stroke-linecap="butt">
+        <path d="M70 46 H48 L31 70 L43 84 H74"/>
+        <path d="M57 86 L97 38"/><path d="M62 44 L99 86"/>
+      </g>
+      <text x="101" y="48" font-family="Inter,sans-serif" font-weight="300" font-size="17" fill="currentColor" letter-spacing=".3">alpha</text>
+      <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
+    </svg></a>
+  <div class="foot-links"><a class="btn ghost sm" href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener">Discord</a><a class="btn ghost sm" href="https://www.alphak.io/tradeoverlord">Free 7-day trial</a></div>
+  <p>© 2026 AlphaKio · Educational platform, not financial advice</p>
+</div></footer>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const cssVar=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const hex=h=>{h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16))};
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+
+/* ============ themes ============ */
+const THEMES=[['slate','Deep Slate'],['violet','Obsidian Violet'],['ocean','Midnight Ocean'],['ember','Carbon Ember']];
+let ti=0; try{const t=localStorage.getItem('ak-theme');ti=Math.max(0,THEMES.findIndex(x=>x[0]===t))}catch(e){}
+let SIG=[47,214,168], LOSS=[232,106,118], PAPER='#E4EDF5';
+function applyTheme(){const [id,name]=THEMES[ti];if(id==='slate')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=id;
+  document.getElementById('themeName').textContent=name;try{localStorage.setItem('ak-theme',id)}catch(e){}
+  SIG=hex(cssVar('--signal'));LOSS=hex(cssVar('--loss'));PAPER=cssVar('--paper');if(reduce)draw()}
+document.getElementById('themeBtn').addEventListener('click',()=>{ti=(ti+1)%THEMES.length;applyTheme()});
+
+/* ============ the vessel: members as a glowing fluid ============ */
+const cv=document.getElementById('sim'), ctx=cv.getContext('2d'), gv=document.getElementById('glass'), gx=gv.getContext('2d'), vessel=document.getElementById('vessel');
+const holeEls=[...document.querySelectorAll('.hole')];
+let W,H,DPR,V,rad,cap,parts=[],joined=0,left=0,frame=0;
+// holes: side, position along the wall (0 = bottom, 1 = top) or across the base, and half-size
+const HOLES=[{side:'L',at:.34,sz:.06,open:true},{side:'R',at:.62,sz:.055,open:true},{side:'B',at:.8,sz:.028,open:true},{side:'R',at:.22,sz:.05,open:true}];
+function layout(){
+  DPR=Math.min(devicePixelRatio||1,2); const r=vessel.getBoundingClientRect(); W=r.width; H=r.height;
+  for(const [c,x] of [[cv,ctx],[gv,gx]]){c.width=W*DPR;c.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0)}
+  const vw=Math.min(W*(W<600?.5:.58),H*.62); const L=W/2-vw/2, R=W/2+vw/2, T=H*.16, B=H*.9, cr=vw*.2;
+  V={L,R,T,B,cr}; rad=clamp(vw/52,3,6); cap=Math.round((vw*(B-T)*1.45)/(rad*rad*5.3));
+  HOLES.forEach((h,i)=>{
+    if(h.side==='B'){h.x1=L+cr+(R-L-2*cr)*(h.at-h.sz*2);h.x2=L+cr+(R-L-2*cr)*(h.at+h.sz*2);h.px=(h.x1+h.x2)/2;h.py=B}
+    else {const span=B-cr-T;h.y2=B-cr-span*(h.at-h.sz);h.y1=B-cr-span*(h.at+h.sz);h.py=(h.y1+h.y2)/2;h.px=h.side==='L'?L:R}
+    Object.assign(holeEls[i].style,{left:h.px+'px',top:h.py+'px'});
+  });
+}
+function spawn(){parts.push({x:W/2-(V.R-V.L)*.18+(Math.random()-.5)*rad*3,y:V.T-H*.12,vx:(Math.random()-.5)*1.4,vy:1.5,s:0,life:1});joined++}
+function step(){
+  const g=.16*(rad/4), {L,R,T,B,cr}=V, n=parts.length;
+  let inside=0; for(const p of parts) if(p.s===0) inside++;
+  if(inside<cap&&frame%2===0){spawn();if(inside<cap*.3)spawn()}
+  for(const p of parts){
+    p.vy+=g; p.vx*=.996; p.vy*=.996; p.x+=p.vx; p.y+=p.vy;
+    if(p.s===1){p.life-=.012;continue}
+    if(p.y<T-H*.2) continue;
+    // side walls (with holes)
+    if(p.x<L+rad){const h=HOLES[0];if(h.open&&p.y>h.y1&&p.y<h.y2){p.s=1;p.vx=-1.2-Math.random()*1.4}else{p.x=L+rad;p.vx*=-.2}}
+    if(p.x>R-rad){let leak=null;for(const h of HOLES)if(h.side==='R'&&h.open&&p.y>h.y1&&p.y<h.y2)leak=h;if(leak){p.s=1;p.vx=1.2+Math.random()*1.4}else{p.x=R-rad;p.vx*=-.2}}
+    if(p.s===1) continue;
+    // base (with hole)
+    if(p.y>B-rad){const h=HOLES[2];if(h.open&&p.x>h.x1&&p.x<h.x2){p.s=1;p.vy=1.5}else{p.y=B-rad;p.vy*=-.15;p.vx*=.92}}
+    // rounded corners
+    for(const cx of [L+cr,R-cr]){const cy=B-cr;if(p.y>cy&&((cx<W/2&&p.x<cx)||(cx>W/2&&p.x>cx))){const dx=p.x-cx,dy=p.y-cy,d=Math.hypot(dx,dy),m=cr-rad;if(d>m){p.x=cx+dx/d*m;p.y=cy+dy/d*m;const nx=dx/d,ny=dy/d,vn=p.vx*nx+p.vy*ny;if(vn>0){p.vx-=1.2*vn*nx;p.vy-=1.2*vn*ny}}}}
+  }
+  // keep particles apart so they pool like a liquid (spatial hash, a few relaxation passes)
+  const cell=rad*2.3;
+  for(let pass=0;pass<3;pass++){
+    const grid=new Map(), key=(cx,cy)=>cx*73856093^cy*19349663;
+    for(let i=0;i<n;i++){const p=parts[i];if(p.s)continue;const k=key((p.x/cell)|0,(p.y/cell)|0);let a=grid.get(k);if(!a)grid.set(k,a=[]);a.push(i)}
+    for(let i=0;i<n;i++){const p=parts[i];if(p.s)continue;const cx=(p.x/cell)|0,cy=(p.y/cell)|0;
+      for(let ox=-1;ox<=1;ox++)for(let oy=-1;oy<=1;oy++){const a=grid.get(key(cx+ox,cy+oy));if(!a)continue;
+        for(const j of a){if(j<=i)continue;const q=parts[j];const dx=q.x-p.x,dy=q.y-p.y,d2=dx*dx+dy*dy;
+          if(d2>0&&d2<cell*cell){const d=Math.sqrt(d2),o=(cell-d)*.5/d;p.x-=dx*o;p.y-=dy*o;q.x+=dx*o;q.y+=dy*o;
+            if(pass===0){const avx=(p.vx+q.vx)/2,avy=(p.vy+q.vy)/2;p.vx+=(avx-p.vx)*.1;p.vy+=(avy-p.vy)*.1;q.vx+=(avx-q.vx)*.1;q.vy+=(avy-q.vy)*.1}}}}}
+    // re-apply the floor so relaxation can't push members through it
+    for(const p of parts){if(p.s)continue;if(p.y>V.B-rad)p.y=V.B-rad;if(p.x<V.L+rad&&!(HOLES[0].open&&p.y>HOLES[0].y1&&p.y<HOLES[0].y2))p.x=V.L+rad;if(p.x>V.R-rad)p.x=V.R-rad}
+  }
+  // cancelled members fall away
+  for(let i=parts.length-1;i>=0;i--){const p=parts[i];if(p.s===1&&(p.y>H+20||p.life<=0||p.x<-20||p.x>W+20)){parts.splice(i,1);left++}}
+  frame++;
+}
+function vesselPath(c){const {L,R,T,B,cr}=V;c.beginPath();c.moveTo(L,T);c.lineTo(L,B-cr);c.arcTo(L,B,L+cr,B,cr);c.lineTo(R-cr,B);c.arcTo(R,B,R,B-cr,cr);c.lineTo(R,T)}
+function draw(){
+  const {L,R,T,B,cr}=V, [sr,sg,sb]=SIG, [lr,lg,lb]=LOSS;
+  // fluid: solid dots, the goo filter melts them into liquid
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle=`rgb(${sr},${sg},${sb})`; ctx.beginPath();
+  for(const p of parts) if(p.s===0){ctx.moveTo(p.x+rad*1.5,p.y);ctx.arc(p.x,p.y,rad*1.5,0,6.283)}
+  ctx.fill();
+  for(const p of parts) if(p.s===1){ctx.fillStyle=`rgba(${lr},${lg},${lb},${p.life})`;ctx.beginPath();ctx.arc(p.x,p.y,rad*1.25,0,6.283);ctx.fill()}
+  // glass
+  gx.clearRect(0,0,W,H);
+  const gl=gx.createLinearGradient(L,0,R,0);gl.addColorStop(0,'rgba(255,255,255,.10)');gl.addColorStop(.12,'rgba(255,255,255,.02)');gl.addColorStop(.8,'rgba(255,255,255,0)');gl.addColorStop(1,'rgba(255,255,255,.09)');
+  vesselPath(gx);gx.lineTo(L,T);gx.fillStyle=gl;gx.fill();
+  gx.lineWidth=2.5;gx.strokeStyle='rgba(255,255,255,.3)';vesselPath(gx);gx.stroke();
+  gx.lineWidth=6;gx.lineCap='round';gx.strokeStyle='rgba(255,255,255,.10)';gx.beginPath();gx.moveTo(L+12,T+24);gx.lineTo(L+12,B-cr-14);gx.stroke();
+  gx.lineWidth=3;gx.strokeStyle='rgba(255,255,255,.07)';gx.beginPath();gx.moveTo(R-14,T+60);gx.lineTo(R-14,T+(B-T)*.45);gx.stroke();
+  gx.fillStyle='rgba(255,255,255,.25)';gx.beginPath();gx.ellipse(W/2,T,(R-L)/2,4,0,0,6.283);gx.fill();
+  for(const h of HOLES){
+    gx.save();gx.lineCap='round';
+    const seg=h.side==='B'?[[h.x1,B],[h.x2,B]]:[[h.px,h.y1],[h.px,h.y2]];
+    if(h.open){gx.globalCompositeOperation='destination-out';gx.lineWidth=9;gx.beginPath();gx.moveTo(...seg[0]);gx.lineTo(...seg[1]);gx.stroke();
+      gx.globalCompositeOperation='source-over';gx.shadowColor=`rgb(${lr},${lg},${lb})`;gx.shadowBlur=20;gx.fillStyle=`rgb(${lr},${lg},${lb})`;
+      for(const e of seg){gx.beginPath();gx.arc(e[0],e[1],3.2,0,6.283);gx.fill()}
+      // hairline cracks around the leak
+      gx.strokeStyle=`rgba(${lr},${lg},${lb},.55)`;gx.lineWidth=1;gx.shadowBlur=8;
+      for(const [e,k] of [[seg[0],-1],[seg[1],1]]){gx.beginPath();gx.moveTo(...e);if(h.side==='B'){gx.lineTo(e[0]+k*9,e[1]-7);gx.lineTo(e[0]+k*16,e[1]-4)}else{const d=h.side==='L'?1:-1;gx.lineTo(e[0]+d*7,e[1]+k*9);gx.lineTo(e[0]+d*4,e[1]+k*17)}gx.stroke()}}
+    else{gx.shadowColor=`rgb(${sr},${sg},${sb})`;gx.shadowBlur=24;gx.strokeStyle=`rgb(${sr},${sg},${sb})`;gx.lineWidth=6;gx.beginPath();
+      if(h.side==='B'){gx.moveTo(h.x1-7,B);gx.lineTo(h.x2+7,B)}else{gx.moveTo(h.px,h.y1-7);gx.lineTo(h.px,h.y2+7)}gx.stroke()}
+    gx.restore();
+  }
+}
+const cIn=document.getElementById('cIn'), cOut=document.getElementById('cOut'), cStay=document.getElementById('cStay');
+function counters(){cIn.textContent=fmt(joined);cOut.textContent=fmt(left+parts.filter(p=>p.s===1).length);cStay.textContent=fmt(parts.filter(p=>p.s===0&&p.y>V.T).length)}
+let running=false;
+function loop(){if(!running)return;step();step();draw();if(frame%12===0)counters();requestAnimationFrame(loop)}
+new IntersectionObserver(es=>es.forEach(e=>{const was=running;running=e.isIntersecting&&!reduce;if(running&&!was)requestAnimationFrame(loop)}),{threshold:0}).observe(vessel);
+function settle(){for(let i=0;i<500;i++)step();draw();counters()} // reduced motion: jump to the steady state
+addEventListener('resize',()=>{layout();parts=parts.filter(p=>p.s===0).map(p=>({...p,x:clamp(p.x,V.L+rad,V.R-rad)}));if(reduce)settle()});
+layout();
+
+/* ============ story steps ============ */
+const story=document.getElementById('story'), scs=[...document.querySelectorAll('.sc')], sd=[...document.querySelectorAll('#stDots i')];
+let lastStep=-1;
+function onStory(){
+  const r=story.getBoundingClientRect(), p=clamp(-r.top/(story.offsetHeight-innerHeight),0,1);
+  const s=Math.min(5,Math.floor(p*6.2));
+  if(s===lastStep) return; lastStep=s;
+  scs.forEach((el,i)=>el.classList.toggle('on',i===s));
+  sd.forEach((d,i)=>{d.classList.toggle('on',i<=s&&s>0);d.classList.toggle('red',s===0&&i===0)});
+  HOLES.forEach((h,i)=>{h.open=s<=i;holeEls[i].classList.toggle('sealed',!h.open)});
+  if(reduce) settle();
+}
+
+/* ============ calculator ============ */
+const $=id=>document.getElementById(id);
+const gBad=$('gBad'), gGood=$('gGood');
+for(let i=0;i<100;i++){gBad.appendChild(document.createElement('i'));gGood.appendChild(document.createElement('i'))}
+const badDots=[...gBad.children], goodDots=[...gGood.children];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let month=11;
+function calc(){
+  const M=+$('iM').value, P=+$('iP').value, C=+$('iC').value/100, D=Math.min(+$('iD').value/100,C-.005), C2=C-D;
+  $('oM').textContent=fmt(M); $('oP').textContent='$'+P; $('oC').textContent=(C*100).toFixed(1).replace('.0','')+'%'; $('oD').textContent=(D*100).toFixed(1).replace('.0','')+' pts';
+  const lost=M*C; $('rLost').textContent=fmt(lost); $('rLostS').textContent=`members you have to re-sell, every month`;
+  $('rYear').textContent='$'+fmt(lost*P*12);
+  $('rKeep').textContent='$'+fmt(M*D*P*12);
+  $('rKeepS').textContent=`and the average member stays ${(1/C).toFixed(1)} → ${(1/C2).toFixed(1)} months`;
+  $('hBad').textContent=`At ${(C*100).toFixed(1).replace('.0','')}% churn`; $('hGood').textContent=`At ${(C2*100).toFixed(1).replace('.0','')}% churn`;
+  paintCohorts(C,C2);
+}
+function paintCohorts(C,C2){
+  const m=month+1; // months elapsed by the end of the shown month
+  const a=Math.round(100*Math.pow(1-C,m)), b=Math.round(100*Math.pow(1-C2,m));
+  badDots.forEach((d,i)=>d.classList.toggle('gone',i>=a)); goodDots.forEach((d,i)=>d.classList.toggle('gone',i>=b));
+  $('lBad').textContent=a; $('lGood').textContent=b; $('mBad').textContent=$('mGood').textContent=MONTHS[month];
+  $('mLbl').textContent=MONTHS[month]; $('mBar').style.transform=`scaleX(${(month+1)/12})`;
+}
+['iM','iP','iC','iD'].forEach(id=>$(id).addEventListener('input',()=>{month=11;calc()}));
+// play the year once when the calculator comes into view
+let played=false;
+new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting||played)return;played=true;if(reduce)return;month=0;calc();
+  const t=setInterval(()=>{month++;calc();if(month>=11)clearInterval(t)},420)}),{threshold:.35}).observe($('gBad'));
+calc();
+
+/* ============ lesson line ============ */
+const lessons=$('lessons');
+for(let i=0;i<10;i++){const n=document.createElement('span');n.className='n';n.style.left=(i/9*100)+'%';n.innerHTML=`<span>${i+1}</span>`;lessons.appendChild(n)}
+
+/* ============ nav + reveal ============ */
+const nav=$('nav');
+function onScroll(){nav.classList.toggle('solid',scrollY>40);onStory()}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4)*80+'ms';io.observe(el)});
+
+/* ============ form (prefilled from the calculator) ============ */
+const form=$('form');
+function prefill(){const f=form.elements;if(!f.members.dataset.touched)f.members.value=$('iM').value;if(!f.price.dataset.touched)f.price.value='$'+$('iP').value;if(!f.churn.dataset.touched)f.churn.value=$('iC').value+'%'}
+['members','price','churn'].forEach(n=>form.elements[n].addEventListener('input',e=>e.target.dataset.touched=1));
+['iM','iP','iC'].forEach(id=>$(id).addEventListener('change',prefill)); prefill();
+// TODO: wire to the real Founding Trader intake endpoint (same as the main page). Currently client-side only.
+form.addEventListener('submit',e=>{e.preventDefault();const f=form.elements;if(!f.name.value.trim()||!f.community.value.trim()){(f.name.value.trim()?f.community:f.name).focus();return}form.classList.add('sent')});
+
+applyTheme();
+if(reduce) settle();
+})();
+</script>
+</body>
+</html>
