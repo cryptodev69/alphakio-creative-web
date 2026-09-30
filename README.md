@@ -7,3 +7,7 @@ A single-file landing page (`index.html`) for AlphaKio's Founding Traders / Coho
 **Run locally:** open `index.html`, or `python3 -m http.server` and visit `http://localhost:8000`.
 
 **Before launch:** wire the application form to a real intake endpoint (see the `TODO` in the script). Concept features are labelled as such on the page; keep it that way until they ship.
+
+## Funnel pages
+
+- `lastcall/` — for traders displaced by TradingView retiring public chats (Sep 30, 2026). Pinned scroll scene: a public chat's noise fades, the good messages fly into an AlphaKio room. Invite form is client-side only (see `TODO`).
