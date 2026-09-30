@@ -11,3 +11,4 @@ A single-file landing page (`index.html`) for AlphaKio's Founding Traders / Coho
 ## Funnel pages
 
 - `lastcall/` — for traders displaced by TradingView retiring public chats (Sep 30, 2026). Auto-playing intro film (chat wall → RETIRED stamp → CRT switch-off → flashlight in the dark → door of light you scroll through), a live example room, room-host pitch, a Discord band, and a just-for-fun ticket that hands off to the 7-day free trial onboarding (nothing is submitted).
+- `scroll/` — "The Way", an alternate Founding Traders page (ink & paper). Canvas brush engine paints an ensō hero, a sideways-scrolling paper scroll with five chapters, a sword-cut workflow scene, hanko-seal offer cards and a brush signature pad. Apply form is client-side only (see `TODO`).
