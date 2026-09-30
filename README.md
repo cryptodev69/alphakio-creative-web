@@ -10,4 +10,4 @@ A single-file landing page (`index.html`) for AlphaKio's Founding Traders / Coho
 
 ## Funnel pages
 
-- `lastcall/` — for traders displaced by TradingView retiring public chats (Sep 30, 2026). Auto-playing intro film (chat wall → RETIRED stamp → CRT switch-off → flashlight in the dark → door of light you scroll through), a live example room, room-host pitch, and a ticket-style invite form that prints as you type. Form is client-side only (see `TODO`).
+- `lastcall/` — for traders displaced by TradingView retiring public chats (Sep 30, 2026). Auto-playing intro film (chat wall → RETIRED stamp → CRT switch-off → flashlight in the dark → door of light you scroll through), a live example room, room-host pitch, a Discord band, and a just-for-fun ticket that hands off to the 7-day free trial onboarding (nothing is submitted).

@@ -191,6 +191,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;justify-content:
 .swap .tag{grid-row:1/3;grid-column:2;align-self:center;font:500 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:99px;padding:5px 9px;white-space:nowrap}
 .swap .tag.live{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 35%,transparent)}
 
+/* discord */
+.dc{width:18px;height:18px;flex:none}
+.dband{padding:clamp(70px,11vh,120px) 0;border-top:1px solid var(--line);background:linear-gradient(120deg,color-mix(in srgb,#5865F2 16%,var(--ink)),var(--ink) 60%);position:relative;overflow:hidden}
+.dband::after{content:"";position:absolute;right:-10%;top:-60%;width:60%;height:220%;background:radial-gradient(circle,color-mix(in srgb,#5865F2 22%,transparent),transparent 60%);pointer-events:none}
+.dband-in{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;position:relative;z-index:1}
+.dband h2{font-size:clamp(40px,5.2vw,80px);margin:18px 0 16px}
+.dband h2 em{color:#8f9bff}
+.dband p{color:var(--mist);max-width:520px}
+.dcard{display:flex;align-items:center;gap:16px;padding:22px 24px;border-radius:18px;background:#5865F2;color:#fff;text-decoration:none;box-shadow:0 30px 60px -30px #5865F2;transition:transform .25s,box-shadow .25s}
+.dcard:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 40px 80px -30px #5865F2}
+.dcard .dc{width:40px;height:40px}
+.dcard b{display:block;font:600 18px/1.2 var(--sans)}
+.dcard small{font:500 12px/1.4 var(--mono);opacity:.8}
+.dcard .arr{margin-left:auto;font-size:22px;transition:transform .2s}.dcard:hover .arr{transform:translateX(5px)}
+.skipline{text-align:center;font-size:13px;color:var(--slate)}
+.skipline a{color:var(--signal)}
+.done-msg .btn{margin-top:20px}
+.done-msg .alt{display:block;margin-top:14px;font-size:14px;color:var(--mist)}
+.done-msg .alt a{color:#8f9bff}
+.side-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
 /* =================== reused blocks =================== */
 section.block{padding:clamp(100px,15vh,170px) 0;border-top:1px solid var(--line)}
 .lede{color:var(--mist);max-width:560px;margin-top:22px}
@@ -257,10 +278,10 @@ footer p{font-size:12px;max-width:560px}
 
 @media (max-width:1000px){
   .moves{grid-template-columns:1fr;gap:36px}.moves::before{display:none}
-  .host,.cta-grid,.inside-grid{grid-template-columns:1fr}
+  .host,.cta-grid,.inside-grid,.dband-in{grid-template-columns:1fr}
 }
 @media (max-width:820px){
-  .nav-r .ghost{display:none}
+  .nav-r .ghost{padding:10px 12px;font-size:0;gap:0}.nav-r .ghost .dc{width:18px;height:18px}
   .wall{gap:12px;padding:0 10px}.w{font-size:11px}.w.big{font-size:15px}
   .t2,.t3{right:var(--gutter);justify-content:flex-start;padding-top:110px}
   .t2 p,.t3 p{font-size:15px}
@@ -294,8 +315,8 @@ footer p{font-size:12px;max-width:560px}
       <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
     </svg></a>
   <div class="nav-r">
-    <a class="btn ghost sm" href="../">What is AlphaKio?</a>
-    <a class="btn sm" href="#invite">Get an invite <span class="arr">→</span></a>
+    <a class="btn ghost sm" href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener"><svg class="dc" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.1 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.8-3.6-13.8zM8.3 15.5c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm7.4 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>Discord</a>
+    <a class="btn sm" href="https://www.alphak.io/tradeoverlord">Start free trial <span class="arr">→</span></a>
   </div>
 </nav>
 
@@ -324,7 +345,7 @@ footer p{font-size:12px;max-width:560px}
       <span class="chip"><i></i>AlphaKio rooms</span>
       <h2>The good takes<br><em>moved in here</em>.</h2>
       <p>TradingView retired its public chats. The people worth listening to <b>still need a room</b>. This one sits next to the tools.</p>
-      <div class="cta-row"><a class="btn" href="#inside">Walk through <span class="arr">→</span></a><a class="btn ghost" href="#invite">Get an invite</a></div>
+      <div class="cta-row"><a class="btn" href="https://www.alphak.io/tradeoverlord">Start 7-day free trial <span class="arr">→</span></a><a class="btn ghost" href="#inside">Walk through ↓</a></div>
     </div>
 
     <button class="skip" id="skip" type="button">Skip intro →</button>
@@ -354,6 +375,20 @@ footer p{font-size:12px;max-width:560px}
   </div>
 </div></section>
 
+<!-- =================== DISCORD =================== -->
+<section class="dband"><div class="wrap dband-in">
+  <div class="dband-copy rv">
+    <span class="chip"><i></i>Open right now</span>
+    <h2>Miss the open room?<br><em>Our Discord's open.</em></h2>
+    <p>Before you set anything up, come say gm. Same energy as the old public rooms, fewer rockets, more people who can explain their chart.</p>
+  </div>
+  <a class="dcard rv" href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener">
+    <svg class="dc" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.1 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.8-3.6-13.8zM8.3 15.5c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm7.4 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+    <span><b>Join the AlphaKio Discord</b><small>discord.gg/ygMN27Gx4</small></span>
+    <span class="arr">→</span>
+  </a>
+</div></section>
+
 <!-- ================= HOSTS ================= -->
 <section class="block"><div class="wrap host">
   <div>
@@ -380,8 +415,8 @@ footer p{font-size:12px;max-width:560px}
   <span class="chip rv"><i></i>Moving over</span>
   <h2 class="rv" style="margin-top:20px">Three moves.<br><em>No migration pain.</em></h2>
   <ol class="moves">
-    <li class="rv"><h3>Get your invite.</h3><p>AlphaKio is invite-only and capped by design. Tell us where you used to hang out.</p></li>
-    <li class="rv"><h3>Bring your crew.</h3><p>Send the people you actually want to keep talking to one invite link to your community.</p></li>
+    <li class="rv"><h3>Start your free trial.</h3><p>Seven days, full access. The link drops you straight into onboarding.</p></li>
+    <li class="rv"><h3>Bring your crew.</h3><p>Share the link with the people you actually want to keep talking to, or meet them in our Discord first.</p></li>
     <li class="rv"><h3>Talk, then practise.</h3><p>Pick up the conversation next to the Alpha, the feed and paper trading, and turn the calls into reps.</p></li>
   </ol>
 </div></section>
@@ -391,20 +426,19 @@ footer p{font-size:12px;max-width:560px}
   <div>
     <span class="chip rv"><i></i>Last call</span>
     <h2 class="rv" style="margin-top:20px">Your <em>ticket</em><br>in.</h2>
-    <p class="lede rv">We're letting people from the old public rooms in small groups, so every room still feels like a room. Fill it in and watch your ticket print.</p>
+    <p class="lede rv">No waitlist. <b>Seven days free, full access</b>, straight into onboarding. Print your ticket on the way in, or <a href="https://www.alphak.io/tradeoverlord" style="color:var(--signal)">skip it and start now</a>.</p>
     <div class="ticket rv" id="ticket" aria-hidden="true">
       <div class="tmain">
         <span class="adm">Admit one</span><span class="brand">AlphaKio · Last Call</span>
         <div class="who" id="tWho"><em>@you</em></div>
-        <dl><dt>From</dt><dd id="tRoom">The Bitcoin room</dd><dt>Bringing</dt><dd id="tCrew">Just me</dd><dt>Door</dt><dd>The Range Reclaim & friends</dd></dl>
-        <div class="tstamp">Requested</div>
+        <dl><dt>From</dt><dd id="tRoom">The Bitcoin room</dd><dt>Bringing</dt><dd id="tCrew">Just me</dd><dt>Pass</dt><dd>7 days · full access · free</dd></dl>
+        <div class="tstamp">Admitted</div>
       </div>
       <div class="tstub"><span class="v">Last call</span><span class="barcode"></span><span class="v">Admit one</span></div>
     </div>
   </div>
   <form id="form" class="rv" novalidate>
-    <label>Your trading handle<input name="handle" required placeholder="@yourhandle" autocomplete="nickname" maxlength="24"></label>
-    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <label>Your trading handle<input name="handle" placeholder="@yourhandle" autocomplete="nickname" maxlength="24"></label>
     <label>Which room did you hang out in?
       <select name="room"><option>Bitcoin</option><option>Crypto (general)</option><option>Altcoins</option><option>Forex</option><option>Stocks</option><option>Other</option></select>
     </label>
@@ -412,10 +446,15 @@ footer p{font-size:12px;max-width:560px}
       <select name="crew"><option>Just me</option><option>A few friends</option><option>I ran a room (100+)</option><option>I ran a big room (1,000+)</option></select>
     </label>
     <button class="btn" type="submit">Print my ticket <span class="arr">→</span></button>
-    <p class="fine">We'll only use this to send your invite.</p>
-    <div class="done-msg"><span class="chip"><i></i>You're on the list</span><h3>See you inside.</h3><p id="doneTxt">We'll email your invite as the next group opens.</p></div>
+    <p class="skipline">Nothing here is sent anywhere. It just prints your ticket. <a href="https://www.alphak.io/tradeoverlord">Skip to the trial →</a></p>
+    <div class="done-msg"><span class="chip"><i></i>Ticket printed</span><h3>You're in.</h3><p id="doneTxt">Seven days free, full access. Your ticket takes you straight to onboarding.</p>
+      <a class="btn" href="https://www.alphak.io/tradeoverlord">Start my 7-day free trial <span class="arr">→</span></a>
+      <span class="alt">or <a href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener">say gm in the Discord</a> first</span></div>
   </form>
-  <p class="fair rv"><b>Heads up:</b> AlphaKio is not affiliated with TradingView. Keep using it for charts. We're just a new home for the conversation.</p>
+  <div>
+    <div class="side-links rv"><a class="btn ghost sm" href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener"><svg class="dc" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.1 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.8-3.6-13.8zM8.3 15.5c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm7.4 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>Join the Discord</a><a class="btn ghost sm" href="../">What is AlphaKio?</a></div>
+    <p class="fair rv"><b>Heads up:</b> AlphaKio is not affiliated with TradingView. Keep using it for charts. We're just a new home for the conversation.</p>
+  </div>
 </div></section>
 
 <footer><div class="wrap">
@@ -428,6 +467,7 @@ footer p{font-size:12px;max-width:560px}
       <text x="101" y="48" font-family="Inter,sans-serif" font-weight="300" font-size="17" fill="currentColor" letter-spacing=".3">alpha</text>
       <text x="97" y="87" font-family="Inter,sans-serif" font-weight="200" font-size="50" fill="currentColor" letter-spacing="-1">Kio</text>
     </svg></a>
+  <div class="side-links" style="margin:0"><a class="btn ghost sm" href="https://discord.gg/ygMN27Gx4" target="_blank" rel="noopener"><svg class="dc" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.1 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.8-3.6-13.8zM8.3 15.5c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm7.4 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>Discord</a><a class="btn sm" href="https://www.alphak.io/tradeoverlord">Start free trial <span class="arr">→</span></a></div>
   <p>TradingView is a trademark of TradingView, Inc. AlphaKio is independent and not affiliated with, endorsed by or sponsored by TradingView. Educational platform, not financial advice.</p>
 </div></footer>
 
@@ -584,11 +624,10 @@ function paint(){
   tCrew.textContent=form.elements.crew.value;
 }
 form.addEventListener('input',paint); paint();
-// TODO: wire to the real waitlist / invite endpoint. Currently client-side only.
+// the ticket is just for fun: nothing is submitted, it hands off to onboarding
 form.addEventListener('submit',e=>{
-  e.preventDefault(); const h=form.elements.handle, m=form.elements.email;
-  if(!h.value.trim()){h.focus();return} if(!m.checkValidity()){m.focus();return}
-  if(/ran a/.test(form.elements.crew.value)) document.getElementById('doneTxt').innerHTML='We\'ll email your invite. Since you ran a room, <a href="../#apply">apply as a Founding Trader</a> too. We\'ll build your Alpha for free.';
+  e.preventDefault();
+  if(/ran a/.test(form.elements.crew.value)) document.getElementById('doneTxt').innerHTML='Seven days free, full access. Since you ran a room, also <a href="../#apply" style="color:var(--signal)">apply as a Founding Trader</a>. We\'ll build your Alpha for free.';
   ticket.classList.add('torn'); ticket.style.transform='rotate(0)';
   form.classList.add('sent');
 });
